@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-<script src="shared.js?v=2"></script>
-<script src="games.js?v=3"></script>
+<script src="shared.js?v=4"></script>
+<script src="games.js?v=4"></script>
 <style>
 :root {
   --red: #C8202F; --red-dark: #8E1220; --cream: #FFF6E4; --paper: #FFF9EC;
@@ -305,6 +305,72 @@ body {
 .mm-card.done .mm-front { background: #FFF3C4; }
 .mm-card:hover:not(.open):not(.done) .mm-in { transform: translateY(-.3cqw); }
 
+/* 추억 트리 */
+.tree-label { gap: 1.2cqw; }
+.tree-bar { flex: 1; height: 1.5cqw; border-radius: 999px; background: #EADBC2; border: .18cqw solid var(--brown); overflow: hidden; }
+.tree-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #2E9E57, #7BD66A); border-radius: 999px; transition: width .6s; }
+.tree-count { font-size: 1.7cqw; color: var(--red); margin-right: 1.4cqw; }
+.tree-mine {
+  position: absolute; left: 68%; width: 19%; top: 88.6%; height: 4.4%; display: flex; align-items: center; justify-content: center;
+  background: var(--red); color: #fff; border: .2cqw solid var(--red-dark); border-radius: 999px; font-size: 1.45cqw;
+}
+.orn {
+  position: absolute; width: 2.7cqw; height: 2.7cqw; margin: -1.35cqw 0 0 -1.35cqw; padding: 0; border: 0; background: none;
+  cursor: pointer; pointer-events: auto; filter: drop-shadow(0 0 .12cqw #fff) drop-shadow(0 .15cqw .1cqw rgba(0,0,0,.35));
+  transform-origin: 50% 0; transition: transform .15s;
+}
+.orn svg { width: 100%; height: 100%; display: block; }
+.orn:hover, .orn:focus-visible { transform: scale(1.45); outline: none; z-index: 3; }
+.orn.mine::after {
+  content: ''; position: absolute; inset: -.35cqw; border-radius: 50%; border: .18cqw dashed rgba(255,240,170,.95);
+  animation: spin 6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.orn.new { animation: ornDrop .7s cubic-bezier(.3,1.4,.5,1) both; }
+@keyframes ornDrop { 0% { transform: translateY(-18cqw) scale(1.8); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; } }
+.orn.new::before {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 8cqw; height: 8cqw; margin: -4cqw 0 0 -4cqw; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,240,150,.9), transparent 65%); animation: burst .9s .5s both; pointer-events: none;
+}
+@keyframes burst { from { transform: scale(.2); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
+.bulb {
+  position: absolute; width: .9cqw; height: .9cqw; margin: -.45cqw 0 0 -.45cqw; border-radius: 50%;
+  background: #6B6B5A; border: .1cqw solid rgba(0,0,0,.35); transition: background .4s, box-shadow .4s;
+}
+.bulb.on { background: #FFE27A; box-shadow: 0 0 .7cqw .25cqw rgba(255,214,90,.85); animation: twinkle 1.8s infinite alternate; }
+.bulb.on.c1 { background: #FF8FA3; box-shadow: 0 0 .7cqw .25cqw rgba(255,120,150,.8); }
+.bulb.on.c2 { background: #8FE3FF; box-shadow: 0 0 .7cqw .25cqw rgba(120,210,255,.8); }
+@keyframes twinkle { to { opacity: .55; } }
+.tree-star {
+  position: absolute; left: 29.4%; top: 14.6%; width: 6.2cqw; height: 6.2cqw; margin: -3.1cqw 0 0 -3.1cqw; z-index: 2; transition: filter .6s;
+  filter: grayscale(1) brightness(.85) opacity(.85);
+}
+.tree-star svg { width: 100%; height: 100%; display: block; }
+.tree-star.done { filter: drop-shadow(0 0 1.4cqw #FFD43B) drop-shadow(0 0 .6cqw #fff); animation: starPulse 1.6s infinite alternate; }
+@keyframes starPulse { to { transform: scale(1.08); } }
+.tree-badge {
+  position: absolute; transform: translateX(-50%); background: #FFF9EC; color: var(--green); border: .2cqw solid var(--brown);
+  border-radius: 999px; font-size: 1.2cqw; padding: .15cqw .9cqw; white-space: nowrap; pointer-events: none;
+  box-shadow: 0 .2cqw 0 rgba(60,30,15,.4);
+}
+.modal.tw, .modal.tv { width: 46cqw; text-align: left; }
+.tw-head { display: flex; align-items: center; gap: 1cqw; margin-bottom: 1.2cqw; }
+.tw-head h3 { margin: 0; }
+.tw-icon svg { width: 4.2cqw; height: 4.2cqw; display: block; }
+#twText {
+  width: 100%; resize: none; font-family: var(--font); font-size: 1.8cqw; color: var(--brown); line-height: 1.5;
+  border: .22cqw solid #A9785A; border-radius: 1.2cqw; padding: 1cqw 1.2cqw; background: #FFFDF7; outline: none;
+}
+#twText:focus { border-color: var(--red); }
+#twText::placeholder { color: #A89080; }
+.tw-foot { display: flex; justify-content: space-between; font-size: 1.35cqw; margin: .6cqw .2cqw 1.4cqw; min-height: 2cqw; }
+.tw-err { color: var(--red); }
+.tw-len { color: #8A6A55; }
+.tv-msg { font-size: 2.1cqw; line-height: 1.55; margin: 0 0 1cqw; background: #FFFDF7; border-radius: 1.2cqw; padding: 1.4cqw 1.6cqw; border: .18cqw dashed #C9A27E; word-break: keep-all; overflow-wrap: anywhere; }
+.tv-name { font-size: 1.5cqw; color: #8A6A55; text-align: right; margin-bottom: 1.4cqw; }
+.modal.tv .big-btn { display: block; margin: 0 auto; }
+#treeWrite .g-btns { justify-content: center; }
+
 @media (prefers-reduced-motion: reduce) { .screen.on { animation: none; } .hot { transition: none; } }
 </style>
 </head>
@@ -345,6 +411,7 @@ body {
     <button class="hot" data-go="post" style="left:17%;top:61%;width:19%;height:24%" aria-label="비밀 우체국"></button>
     <button class="hot" data-go="door" style="left:40%;top:64%;width:21%;height:32%" aria-label="중3으로 향하는 문"></button>
     <button class="hot" data-go="guestbook" style="left:63%;top:61%;width:22%;height:24%" aria-label="방명록"></button>
+    <div class="tree-badge" id="mapTreeBadge" style="left:50.6%;top:54.6%">장식 0개</div>
     <div class="chip"><span id="chipName"></span><span class="pt" id="chipPt"></span><button data-music="1" class="mus">캐럴 끄기</button><button id="logoutBtn">나가기</button></div>
   </section>
 
@@ -379,14 +446,20 @@ body {
   <!-- 5. 추억 트리 -->
   <section class="screen" id="s-tree">
     <img class="bg" alt="" data-img="tree">
-    <div class="pill-cover label" style="left:.8%;top:.6%;width:44.6%;height:9.6%">추억 트리 (함께 만드는 메시지 트리)</div>
-    <button class="hot pill" data-go="map" style="left:78.6%;top:.8%;width:20.4%;height:9.4%" aria-label="마을로 돌아가기"></button>
-    <button class="hot" data-soon="별 장식" style="left:58.9%;top:43.4%;width:11.7%;height:20.8%" aria-label="별 나의 소원"></button>
-    <button class="hot" data-soon="리본 장식" style="left:71.6%;top:43.4%;width:11.8%;height:20.8%" aria-label="리본 행복했던 순간"></button>
-    <button class="hot" data-soon="종 장식" style="left:84.5%;top:43.4%;width:11.9%;height:20.8%" aria-label="종 선생님께"></button>
-    <button class="hot" data-soon="하트 장식" style="left:58.9%;top:65.6%;width:11.7%;height:22.2%" aria-label="하트 친구들에게"></button>
-    <button class="hot" data-soon="선물 장식" style="left:71.6%;top:65.6%;width:11.8%;height:22.2%" aria-label="선물 소중했던 것"></button>
-    <button class="hot" data-soon="눈송이 장식" style="left:84.5%;top:65.6%;width:11.9%;height:22.2%" aria-label="눈송이 중3의 나에게"></button>
+    <div class="pill-cover label tree-label" style="left:.8%;top:.8%;width:44.6%;height:8.8%">
+      <span>추억 트리</span>
+      <div class="tree-bar"><i id="treeBarFill"></i></div>
+      <span class="tree-count" id="treeCount">장식 0개</span>
+    </div>
+    <button class="hot pill" data-go="map" style="left:78.8%;top:1.3%;width:20.2%;height:8.4%" aria-label="마을로 돌아가기"></button>
+    <div id="treeLayer" class="abs" style="inset:0;pointer-events:none"></div>
+    <button class="hot" data-orn="star" style="left:58.9%;top:43.6%;width:11.7%;height:20.7%" aria-label="별 나의 소원"></button>
+    <button class="hot" data-orn="ribbon" style="left:71.7%;top:43.6%;width:11.7%;height:20.7%" aria-label="리본 행복했던 순간"></button>
+    <button class="hot" data-orn="bell" style="left:84.6%;top:43.6%;width:11.8%;height:20.7%" aria-label="종 선생님께"></button>
+    <button class="hot" data-orn="heart" style="left:58.9%;top:65.9%;width:11.7%;height:22%" aria-label="하트 친구들에게"></button>
+    <button class="hot" data-orn="gift" style="left:71.7%;top:65.9%;width:11.7%;height:22%" aria-label="선물 소중했던 것"></button>
+    <button class="hot" data-orn="snow" style="left:84.6%;top:65.9%;width:11.8%;height:22%" aria-label="눈송이 중3의 나에게"></button>
+    <div class="tree-mine" id="treeMine">내 장식 0 / 3</div>
   </section>
 
   <!-- 6. 연말 시상식 -->
@@ -459,6 +532,18 @@ body {
   </button>
   <div id="previewTag">미리보기 모드</div>
   <div id="toast"></div>
+  <div class="modal-bg" id="treeWrite"><div class="modal tw">
+    <div class="tw-head"><span class="tw-icon"></span><h3 class="tw-title"></h3></div>
+    <textarea id="twText" maxlength="80" rows="3"></textarea>
+    <div class="tw-foot"><span class="tw-err" id="twErr"></span><span class="tw-len" id="twLen">0 / 80</span></div>
+    <div class="g-btns"><button class="big-btn light" id="twCancel">취소</button><button class="big-btn" id="twOk">트리에 달기</button></div>
+  </div></div>
+  <div class="modal-bg" id="treeView"><div class="modal tv">
+    <div class="tw-head"><span class="tw-icon"></span><h3 class="tw-title"></h3></div>
+    <p class="tv-msg"></p>
+    <div class="tv-name"></div>
+    <button class="big-btn light" id="tvClose">닫기</button>
+  </div></div>
   <div class="modal-bg" id="pickModal"><div class="modal"><h3>나는 어느 반이야?</h3><div class="choices" id="pickList"></div></div></div>
 </div>
 
@@ -507,13 +592,62 @@ body {
           if (!list.length) return ok({ ok: false, msg: '이름이나 초대코드를 다시 확인해 줘!' });
           if (list.length > 1) return ok({ ok: true, pick: list.map(function (s) { return { grade: s.grade, teacher: s.teacher }; }) });
           var s = list[0];
+          fakeJoin(s.name + s.grade + s.teacher);
           return ok({ ok: true, student: { name: s.name, grade: s.grade, teacher: s.teacher, points: s.points } });
         }
         if (action === 'gameScore') return ok({ ok: true });
+        if (action === 'treeList') return ok({ ok: true, items: fakeTree(d), today: fakeToday() });
+        if (action === 'treeAdd') {
+          var err = S.checkTreeMessage(d.msg);
+          if (err) return ok({ ok: false, msg: err });
+          if (!S.treeType(d.type)) return ok({ ok: false, msg: '장식을 다시 골라 줘!' });
+          var all = fakeTreeStore();
+          var mine = all.filter(function (x) { return x.owner === d.name + d.grade + d.teacher; }).length;
+          if (mine >= S.TREE.perStudent) return ok({ ok: false, msg: '장식은 ' + S.TREE.perStudent + '개까지 달 수 있어!' });
+          var id = 't' + Date.now();
+          all.push({ id: id, type: d.type, msg: String(d.msg).trim(), name: d.name, owner: d.name + d.grade + d.teacher });
+          try { localStorage.setItem('cv-tree', JSON.stringify(all)); } catch (e) {}
+          return ok({ ok: true, id: id, items: fakeTree(d), today: fakeToday() });
+        }
         ok({ ok: false, msg: '알 수 없는 요청' });
       }, 350);
     });
   }
+  var FAKE_TREE_MSGS = [
+    ['star', '중3 때도 다 같은 반 됐으면!', '박서윤'], ['heart', '얘들아 1년 동안 고마웠어', '최도윤'], ['bell', '선생님 덕분에 영어가 좋아졌어요', '정하준'],
+    ['ribbon', '체육대회 날 진짜 재밌었다', '강지우'], ['gift', '우리 반 단톡방 ㅋㅋ', '윤서진'], ['snow', '중3의 나, 수학 포기하지 마', '임채원'],
+    ['star', '겨울방학 때 키 크기', '한유준'], ['heart', '다들 메리 크리스마스!', '오지민'], ['ribbon', '시험 끝나고 떡볶이 먹은 날', '서예린'],
+    ['bell', '쌤 수업 최고예요!!', '신민재'], ['gift', '친구들이랑 찍은 사진', '권하은'], ['star', '올해보다 더 행복하기', '황시우'],
+    ['heart', '내년에도 잘 지내자~', '안수아'], ['snow', '중3도 파이팅!!', '송지호'], ['ribbon', '수행평가 다 끝낸 날', '류다인'],
+    ['bell', '선생님 감사합니다', '전우진'], ['star', '원하는 고등학교 가기', '홍서아'], ['heart', '우리 반 최고!', '고은우'],
+    ['gift', '매일 같이 먹던 간식', '문하린'], ['snow', '나야 힘내!', '양준서']
+  ];
+  function fakeTreeStore() {
+    try {
+      var all = JSON.parse(localStorage.getItem('cv-tree') || 'null');
+      if (all) return all;
+    } catch (e) {}
+    return FAKE_TREE_MSGS.map(function (m, i) { return { id: 'f' + i, type: m[0], msg: m[1], name: m[2], owner: m[2] }; });
+  }
+  // 미리보기: 오늘 들어온 친구 = 가짜 친구 7명 + 이 기기에서 로그인한 학생
+  function fakeJoin(key) {
+    try {
+      var k = 'cv-joined-' + S.todayKey(), arr = JSON.parse(localStorage.getItem(k) || '[]');
+      if (arr.indexOf(key) < 0) { arr.push(key); localStorage.setItem(k, JSON.stringify(arr)); }
+    } catch (e) {}
+  }
+  function fakeToday() {
+    var joined = FAKE_TREE_MSGS.slice(0, 7).map(function (m) { return m[2]; });
+    try { joined = joined.concat(JSON.parse(localStorage.getItem('cv-joined-' + S.todayKey()) || '[]')); } catch (e) {}
+    var owners = fakeTreeStore().map(function (x) { return x.owner; });
+    var done = joined.filter(function (k) { return owners.indexOf(k) >= 0; }).length;
+    return { joined: joined.length, done: done };
+  }
+  function fakeTree(d) {
+    var key = (d.name || '') + (d.grade || '') + (d.teacher || '');
+    return fakeTreeStore().map(function (x) { return { id: x.id, type: x.type, msg: x.msg, name: S.maskName(x.name), mine: x.owner === key }; });
+  }
+
   api('ping'); // 서버 미리 깨우기
 
   // ---------- 화면 이동 ----------
@@ -522,12 +656,15 @@ body {
     if (name !== 'invite' && !me) name = 'invite';
     screens.forEach(function (n) { document.getElementById('s-' + n).classList.toggle('on', n === name); });
     document.getElementById('musicBtn').style.display = ['gameland','quizhouse','tree','door','market'].indexOf(name) >= 0 ? 'flex' : 'none';
+    if ((name === 'tree' || name === 'map') && me && typeof Tree !== 'undefined') Tree.load();
     try { sessionStorage.setItem('cv-screen', name === 'game' ? 'gameland' : name); } catch (e) {}
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-go]');
     if (b) { go(b.dataset.go); return; }
     if (e.target.closest('[data-music]')) { Music.toggle(); return; }
+    var ob = e.target.closest('[data-orn]');
+    if (ob) { Tree.openWrite(ob.dataset.orn); return; }
     var gm = e.target.closest('[data-game]');
     if (gm) { go('game'); Games.open(gm.dataset.game); return; }
     if (e.target.closest('.game-exit')) { Games.close(); go('gameland'); return; }
@@ -651,6 +788,135 @@ body {
     return { start: start, toggle: toggle, isOn: function () { return on; } };
   })();
   document.getElementById('musicBtn').onclick = Music.toggle;
+
+  // ---------- 추억 트리 ----------
+  var TREE_DATA = {"slots":[[27.63,24.34],[15.55,72.05],[36.36,56.11],[28.53,72.69],[43.72,73.01],[30.26,43.89],[22.91,62.17],[47.01,61.42],[36.96,73.33],[29.84,57.81],[31.88,32.73],[40.31,64.08],[22.85,73.11],[23.86,51.54],[33.61,64.72],[17.17,64.29],[34.81,42.4],[25.84,41.87],[48.27,68.86],[19.56,53.45],[28.59,65.14],[40.25,51.75],[28.05,34.75],[43.36,59.94],[31.82,52.18],[32.18,73.11],[25.3,31.24],[40.31,73.11],[37.32,66.74],[26.02,60.36],[14.17,66.52],[34.69,35.28],[22.91,46.23],[26.79,49.73],[19.8,67.16],[39.59,57.07],[22.85,67.69],[38.04,41.76],[14.23,61.11],[23.27,56.64],[18.42,71.73],[50.72,71.52],[25.66,65.25],[30.44,69.18],[43.6,68.23],[25.54,36.34],[31.94,47.5],[29.01,39.11],[44.08,54.52],[35.23,52.07],[34.45,46.87],[29.67,30.61],[30.08,25.19],[34.93,70.78],[32.06,59.83],[44.92,63.76],[38.04,49.84],[27.33,68.97],[25.24,72.58],[25.48,55.05],[19.26,62.27],[23.62,38.79],[37.92,62.7],[17.17,60.15],[27.57,28.8],[27.75,55.79],[47.31,72.58],[38.7,70.24],[25.3,45.8],[30.74,36.24],[20.69,71.52],[28.83,47.93],[36.72,38.47],[34.21,57.28],[45.33,58.02],[21.05,50.48],[28.23,61.0],[30.44,62.91],[32.48,43.36],[28.05,43.57],[32.89,29.22],[38.16,53.77],[16.75,68.76],[41.15,60.47],[48.09,64.82],[32.66,68.23],[41.63,54.73],[29.67,53.99],[21.29,59.62],[41.75,70.24],[42.17,49.63],[35.77,64.08],[42.4,65.04],[33.19,39.74],[36.24,59.94],[45.39,70.35],[31.88,56.0],[23.68,42.61]],"bulbs":[[[24.65,29.9],[28.01,30.49],[30.11,30.79],[32.21,31.02],[34.31,31.19]],[[22.97,40.55],[25.07,40.98],[27.17,41.36],[29.27,41.68],[31.37,41.93],[33.47,42.13],[35.57,42.27],[37.67,42.35],[39.77,42.37]],[[17.92,50.31],[20.03,50.86],[22.13,51.36],[24.23,51.81],[26.33,52.21],[28.43,52.56],[30.53,52.84],[32.63,53.06],[34.73,53.22],[36.83,53.32],[38.93,53.37],[41.03,53.35],[43.13,53.29]],[[13.72,60.11],[15.82,60.72],[17.92,61.31],[20.03,61.86],[22.13,62.36],[24.23,62.81],[26.33,63.21],[28.43,63.56],[30.53,63.84],[32.63,64.06],[34.73,64.22],[36.83,64.32],[38.93,64.37],[41.03,64.35],[43.13,64.29],[45.24,64.18],[47.34,64.03]],[[14.56,70.36],[16.66,70.96],[18.76,71.53],[20.87,72.06],[22.97,72.55],[25.07,72.98],[27.17,73.36]]]};
+  var OUTL = '#4A2C1A';
+  var ORN = {
+    star: '<path d="M20 3 l5 10.5 11.5 1.6 -8.3 8 2 11.4 -10.2 -5.4 -10.2 5.4 2 -11.4 -8.3 -8 11.5 -1.6 Z" fill="#FFD43B" stroke="' + OUTL + '" stroke-width="2.6" stroke-linejoin="round"/>',
+    ribbon: '<path d="M20 18 C10 6 2 10 5 18 C7 24 14 22 20 18 Z M20 18 C30 6 38 10 35 18 C33 24 26 22 20 18 Z" fill="#F0525B" stroke="' + OUTL + '" stroke-width="2.4" stroke-linejoin="round"/><path d="M18 20 L11 36 L16 34 L19 38 L20 21 Z M22 20 L29 36 L24 34 L21 38 L20 21 Z" fill="#E43B45" stroke="' + OUTL + '" stroke-width="2.2" stroke-linejoin="round"/><circle cx="20" cy="18.5" r="4" fill="#E43B45" stroke="' + OUTL + '" stroke-width="2.4"/>',
+    bell: '<path d="M20 6 C11 6 9 15 9 22 L5 31 H35 L31 22 C31 15 29 6 20 6 Z" fill="#FFD43B" stroke="' + OUTL + '" stroke-width="2.6" stroke-linejoin="round"/><circle cx="20" cy="34" r="3.6" fill="#F59F00" stroke="' + OUTL + '" stroke-width="2.4"/><circle cx="20" cy="5" r="2.6" fill="#E43B45" stroke="' + OUTL + '" stroke-width="2"/>',
+    heart: '<path d="M20 35 C6 25 3 17 6 11 C9 5 17 5 20 12 C23 5 31 5 34 11 C37 17 34 25 20 35 Z" fill="#F03E4F" stroke="' + OUTL + '" stroke-width="2.6" stroke-linejoin="round"/><ellipse cx="12" cy="13" rx="3" ry="2" fill="#fff" opacity=".7"/>',
+    gift: '<rect x="6" y="15" width="28" height="21" rx="2.5" fill="#E43B45" stroke="' + OUTL + '" stroke-width="2.4"/><rect x="4" y="11" width="32" height="7" rx="2" fill="#F0525B" stroke="' + OUTL + '" stroke-width="2.4"/><rect x="17" y="11" width="6" height="25" fill="#FFD43B" stroke="' + OUTL + '" stroke-width="1.8"/><path d="M20 11 C13 2 6 6 11 10 Z M20 11 C27 2 34 6 29 10 Z" fill="#FFD43B" stroke="' + OUTL + '" stroke-width="2.2"/>',
+    snow: '<circle cx="20" cy="20" r="16" fill="#E7F5FF" stroke="' + OUTL + '" stroke-width="2.4"/><g stroke="#3B9BE0" stroke-width="2.8" stroke-linecap="round"><path d="M20 8 V32 M9.6 14 L30.4 26 M9.6 26 L30.4 14"/><path d="M17 10.5 L20 13 L23 10.5 M17 29.5 L20 27 L23 29.5"/></g>'
+  };
+  function ornSvg(k) { return '<svg viewBox="0 0 40 40">' + (ORN[k] || ORN.star) + '</svg>'; }
+  var Tree = (function () {
+    var items = [], loaded = false, layer = document.getElementById('treeLayer');
+    var bulbs = [], curType = null, today = { joined: 0, done: 0 }, wasDone = null;
+    // 전구: 여러 줄을 번갈아 켜지게 순서 섞기
+    (function () {
+      var lines = TREE_DATA.bulbs, max = 0, k = 0;
+      lines.forEach(function (l) { max = Math.max(max, l.length); });
+      for (var i = 0; i < max; i++) lines.forEach(function (l, li) {
+        var p = l[i];
+        if (p) { var b = document.createElement('span'); b.className = 'bulb c' + (k++ % 3); b.style.left = p[0] + '%'; b.style.top = p[1] + '%'; layer.appendChild(b); bulbs.push(b); }
+      });
+      var st = document.createElement('div'); st.className = 'tree-star'; st.id = 'treeStar';
+      st.innerHTML = '<svg viewBox="0 0 40 40">' + ORN.star + '</svg>'; layer.appendChild(st);
+    })();
+    function slotOf(i) {
+      var S0 = TREE_DATA.slots, n = S0.length, p = S0[i % n];
+      if (i < n) return p;
+      var r = Math.floor(i / n), a = i * 2.39996;
+      return [p[0] + Math.cos(a) * 0.9 * r, p[1] + Math.sin(a) * 1.5 * r];
+    }
+    function mineCount() { return items.filter(function (it) { return it.mine; }).length; }
+    function render(newId) {
+      layer.querySelectorAll('.orn').forEach(function (o) { o.remove(); });
+      items.forEach(function (it, i) {
+        var p = slotOf(i), b = document.createElement('button');
+        b.className = 'orn' + (it.mine ? ' mine' : '') + (it.id === newId ? ' new' : '');
+        b.style.left = p[0] + '%'; b.style.top = p[1] + '%';
+        b.innerHTML = ornSvg(it.type); b.dataset.i = i;
+        b.setAttribute('aria-label', S.treeType(it.type).name + ' 장식');
+        layer.appendChild(b);
+      });
+      progress();
+    }
+    function progress() {
+      var pr = S.treeProgress(today), ratio = pr.complete ? 1 : pr.ratio;
+      document.getElementById('treeBarFill').style.width = (ratio * 100) + '%';
+      document.getElementById('treeCount').textContent = pr.complete ? '오늘 트리 완성!' : '오늘 쓴 친구 ' + pr.done + ' / ' + pr.joined + '명';
+      var on = Math.round(bulbs.length * ratio);
+      bulbs.forEach(function (b, i) { b.classList.toggle('on', i < on); });
+      document.getElementById('treeStar').classList.toggle('done', pr.complete);
+      document.getElementById('treeMine').textContent = '내 장식 ' + mineCount() + ' / ' + S.TREE.perStudent;
+      document.getElementById('mapTreeBadge').textContent = pr.complete ? '오늘 트리 완성!' : '오늘 ' + pr.done + ' / ' + pr.joined + '명';
+      return pr.complete;
+    }
+    function load() {
+      return api('treeList', who()).then(function (r) {
+        if (!r.ok) return;
+        var newIds = loaded ? r.items.filter(function (x) { return !items.some(function (y) { return y.id === x.id; }); }) : [];
+        items = r.items; today = r.today || today; loaded = true;
+        render(newIds.length === 1 ? newIds[0].id : null);
+        var done = S.treeProgress(today).complete;
+        if (wasDone === false && done && document.getElementById('s-tree').classList.contains('on')) celebrate();
+        wasDone = done;
+      });
+    }
+    function celebrate() {
+      if (window.Games) { Games.sfx('win'); Games.confetti(document.getElementById('stage')); }
+      toast('오늘 트리 완성!<br><span style="font-size:1.5cqw">모두의 마음으로 트리에 불이 켜졌어!</span>');
+    }
+    // 트리·지도 화면에 있을 때 20초마다 새 장식 불러오기
+    setInterval(function () {
+      if (me && (document.getElementById('s-tree').classList.contains('on') || document.getElementById('s-map').classList.contains('on'))) load();
+    }, 20000);
+    function head(box, k) {
+      var t = S.treeType(k);
+      box.querySelector('.tw-icon').innerHTML = ornSvg(k);
+      box.querySelector('.tw-title').textContent = t.name + ' · ' + t.sub;
+    }
+    function openWrite(k) {
+      if (mineCount() >= S.TREE.perStudent) { toast('장식은 ' + S.TREE.perStudent + '개까지 달 수 있어!<br><span style="font-size:1.5cqw">트리를 눌러 친구들 메시지를 구경해 봐.</span>'); return; }
+      curType = k;
+      var box = document.getElementById('treeWrite');
+      head(box, k);
+      var ta = document.getElementById('twText');
+      ta.value = ''; ta.placeholder = S.treeType(k).ph; ta.maxLength = S.TREE.maxLen;
+      document.getElementById('twErr').textContent = ''; document.getElementById('twLen').textContent = '0 / ' + S.TREE.maxLen;
+      box.classList.add('on'); setTimeout(function () { ta.focus(); }, 50);
+    }
+    function submit() {
+      var msgTxt = document.getElementById('twText').value.trim();
+      var err = S.checkTreeMessage(msgTxt);
+      if (err) { document.getElementById('twErr').textContent = err; return; }
+      var btn = document.getElementById('twOk'); btn.disabled = true; btn.textContent = '다는 중...';
+      api('treeAdd', Object.assign(who(), { type: curType, msg: msgTxt })).then(function (r) {
+        btn.disabled = false; btn.textContent = '트리에 달기';
+        if (!r.ok) { document.getElementById('twErr').textContent = r.msg || '다시 시도해 줘!'; return; }
+        document.getElementById('treeWrite').classList.remove('on');
+        var was = S.treeProgress(today).complete;
+        items = r.items; today = r.today || today; render(r.id);
+        if (window.Games) Games.sfx('match');
+        var now = S.treeProgress(today).complete; wasDone = now;
+        setTimeout(function () { if (!was && now) celebrate(); else toast('트리에 달았어!'); }, 700);
+      }).catch(function () { btn.disabled = false; btn.textContent = '트리에 달기'; document.getElementById('twErr').textContent = '연결이 느려요. 다시 눌러 줘!'; });
+    }
+    function view(i) {
+      var it = items[i]; if (!it) return;
+      var box = document.getElementById('treeView');
+      head(box, it.type);
+      box.querySelector('.tv-msg').textContent = it.msg;
+      box.querySelector('.tv-name').textContent = (it.mine ? '내가 단 장식 · ' : 'from. ') + it.name;
+      box.classList.add('on');
+    }
+    document.getElementById('twText').addEventListener('input', function (e) {
+      document.getElementById('twLen').textContent = e.target.value.length + ' / ' + S.TREE.maxLen;
+      document.getElementById('twErr').textContent = '';
+    });
+    document.getElementById('twOk').onclick = submit;
+    document.getElementById('twCancel').onclick = function () { document.getElementById('treeWrite').classList.remove('on'); };
+    document.getElementById('tvClose').onclick = function () { document.getElementById('treeView').classList.remove('on'); };
+    document.querySelectorAll('#treeView, #treeWrite').forEach(function (bg) {
+      bg.addEventListener('click', function (e) { if (e.target === bg) bg.classList.remove('on'); });
+    });
+    layer.addEventListener('click', function (e) { var o = e.target.closest('.orn'); if (o) view(+o.dataset.i); });
+    return { load: load, openWrite: openWrite, isLoaded: function () { return loaded; } };
+  })();
+  function who() { return me ? { name: me.name, grade: me.grade, teacher: me.teacher } : {}; }
 
   // ---------- 게임에서 쓰는 것 ----------
   window.CV = {
