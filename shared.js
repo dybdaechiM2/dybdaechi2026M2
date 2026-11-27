@@ -1,7 +1,7 @@
 /* 2026 M2 Christmas Village — 공용 규칙 (사이트와 Apps Script가 같이 씀) */
 var SHARED = (function () {
   var S = {};
-  S.VERSION = 4;                                   // 그림·파일을 바꾸면 1씩 올리기
+  S.VERSION = 5;                                   // 그림·파일을 바꾸면 1씩 올리기
   S.PROD_HOST = 'dybdaechim2.github.io';           // 이 주소에서만 진짜 서버 사용
   S.API_URL = '';                                  // Apps Script 웹 앱 주소 (2단계에서 넣음)
   S.TIMEOUT_MS = 25000;
@@ -42,6 +42,16 @@ var SHARED = (function () {
   S.treeType = function (key) {
     for (var i = 0; i < S.TREE.types.length; i++) if (S.TREE.types[i].key === key) return S.TREE.types[i];
     return null;
+  };
+
+  // ---------- 비밀 우체국 ----------
+  S.LETTER = { min: 10, max: 500, points: 1000 };   // 선생님께 편지: 1인 1통, 1,000포인트
+  S.checkLetter = function (text, extra) {
+    text = String(text || '').trim();
+    if (text.length < S.LETTER.min) return S.LETTER.min + '자 이상 써 줘!';
+    if (text.length > S.LETTER.max) return S.LETTER.max + '자까지만 쓸 수 있어!';
+    if (S.findBadWord(text, extra)) return '바르고 고운 말로 다시 써 줘!';
+    return '';
   };
 
   // ---------- 금지어 검사 (띄어쓰기·특수문자·숫자 끼워넣기 우회도 잡기) ----------

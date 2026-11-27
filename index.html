@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-<script src="shared.js?v=4"></script>
+<script src="shared.js?v=5"></script>
 <script src="games.js?v=4"></script>
 <style>
 :root {
@@ -371,6 +371,88 @@ body {
 .modal.tv .big-btn { display: block; margin: 0 auto; }
 #treeWrite .g-btns { justify-content: center; }
 
+/* 비밀 우체국 */
+.post-tag {
+  position: absolute; transform: translateX(-50%); white-space: nowrap; pointer-events: none; z-index: 2;
+  font-size: 1.3cqw; padding: .25cqw 1cqw; border-radius: 999px; border: .2cqw solid var(--brown);
+  background: #FFF9EC; color: var(--brown); box-shadow: 0 .25cqw 0 rgba(60,30,15,.4); display: none;
+}
+.post-tag.on { display: block; }
+.post-tag.done { background: #E7F7EC; color: var(--green); border-color: var(--green); }
+.post-tag.new { background: var(--red); color: #fff; border-color: var(--red-dark); animation: bounce 1s infinite; }
+@keyframes bounce { 50% { transform: translate(-50%, -.5cqw); } }
+.letter {
+  position: relative; width: 58cqw; max-height: 52cqw; display: flex; flex-direction: column;
+  background: #FFFDF5; border: .35cqw solid var(--brown); border-radius: 1.6cqw; padding: 2cqw 2.8cqw 2cqw;
+  box-shadow: 0 .6cqw 0 rgba(60,30,15,.45);
+  background-image: linear-gradient(90deg, transparent 4.2cqw, rgba(228,59,69,.35) 4.2cqw 4.35cqw, transparent 4.35cqw);
+}
+.letter::before {
+  content: ''; position: absolute; left: 50%; top: -1.6cqw; width: 8cqw; height: 3cqw; transform: translateX(-50%) rotate(-3deg);
+  background: rgba(255, 212, 59, .75); border-radius: .3cqw;
+}
+.lt-to { font-size: 2.3cqw; color: var(--red); margin: 0 0 .6cqw 2.2cqw; }
+.lt-from { font-size: 1.8cqw; text-align: right; margin-top: .6cqw; }
+#ltText, .lr-body {
+  width: 100%; font-family: var(--font); font-size: 1.75cqw; color: var(--brown); line-height: 3cqw;
+  border: 0; outline: 0; resize: none; padding: 0 0 0 2.2cqw; height: 24cqw;
+  background: repeating-linear-gradient(transparent 0 2.85cqw, #E6D3B8 2.85cqw 3cqw);
+  background-attachment: local;
+}
+#ltText::placeholder { color: #B19A86; }
+#ltText[readonly] { color: #6E5442; }
+.lr-body { overflow-y: auto; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; height: auto; min-height: 18cqw; max-height: 30cqw; }
+.letter .g-btns { margin-top: .6cqw; }
+.letter.read { display: none; }
+#letterOpen.reading .env-wrap { display: none; }
+#letterOpen.reading .letter.read { display: flex; animation: letterUp .5s ease-out; }
+@keyframes letterUp { from { transform: translateY(8cqw) scale(.85); opacity: 0; } }
+.env-wrap { display: flex; flex-direction: column; align-items: center; gap: 1.6cqw; }
+.env { position: relative; width: 40cqw; height: 26cqw; cursor: pointer; perspective: 80cqw; }
+.env:hover { transform: rotate(-1.5deg); }
+.env-back { position: absolute; inset: 0; border-radius: 1.2cqw; background: #C92E2A; border: .35cqw solid var(--brown); }
+.env-front {
+  position: absolute; inset: 0; background: #F05A52; z-index: 3; border-radius: 1.2cqw;
+  clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%);
+  box-shadow: inset 0 0 0 .35cqw var(--brown);
+}
+.env-front::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to bottom right, transparent calc(50% - .2cqw), var(--brown) calc(50% - .2cqw) calc(50% + .2cqw), transparent calc(50% + .2cqw)) left top / 50% 56% no-repeat,
+              linear-gradient(to bottom left, transparent calc(50% - .2cqw), var(--brown) calc(50% - .2cqw) calc(50% + .2cqw), transparent calc(50% + .2cqw)) right top / 50% 56% no-repeat;
+}
+.env-paper {
+  position: absolute; left: 3cqw; right: 3cqw; top: 2cqw; height: 20cqw; background: #FFFDF5; border-radius: .8cqw;
+  border: .25cqw solid var(--brown); z-index: 2; transition: transform .6s .35s;
+  background-image: repeating-linear-gradient(transparent 0 2.2cqw, #E6D3B8 2.2cqw 2.35cqw);
+}
+.env-flap {
+  position: absolute; left: 0; right: 0; top: 0; height: 100%; z-index: 4; transform-origin: 50% 0; transition: transform .5s, z-index 0s .25s;
+  background: var(--brown); clip-path: polygon(0 0, 100% 0, 50% 62%);
+}
+.env-flap::after {
+  content: ''; position: absolute; inset: .35cqw .5cqw 0; background: #D8352F; clip-path: polygon(0 0, 100% 0, 50% 60%);
+}
+.env-seal {
+  position: absolute; left: 50%; top: 12.6cqw; width: 5cqw; height: 5cqw; margin-left: -2.5cqw; border-radius: 50%; z-index: 5;
+  background: radial-gradient(circle at 35% 35%, #FFE27A, #E0A800); border: .3cqw solid var(--brown); color: var(--red);
+  display: flex; align-items: center; justify-content: center; font-size: 2.6cqw; transition: opacity .3s;
+}
+.env-name {
+  position: absolute; left: 0; right: 0; bottom: 1.6cqw; text-align: center; z-index: 5; color: #fff; font-size: 2.2cqw;
+  text-shadow: 0 .15cqw 0 rgba(0,0,0,.35);
+}
+.env-hint { color: #fff; font-size: 1.9cqw; text-shadow: 0 .15cqw .3cqw rgba(0,0,0,.5); animation: bounce2 1.2s infinite; }
+@keyframes bounce2 { 50% { transform: translateY(-.5cqw); } }
+.env.open .env-flap { transform: rotateX(180deg); z-index: 1; }
+.env.open .env-seal { opacity: 0; }
+.env.open .env-paper { transform: translateY(-12cqw); }
+.fly-env {
+  position: absolute; z-index: 45; width: 6cqw; height: 4cqw; border-radius: .5cqw; background: #FFF9EC; border: .25cqw solid var(--brown);
+  pointer-events: none; transition: left .7s cubic-bezier(.5,0,.6,1), top .7s cubic-bezier(.5,-.6,.6,1), transform .7s, opacity .3s .6s;
+}
+.fly-env::after { content: '♥'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--red); font-size: 2cqw; }
+
 @media (prefers-reduced-motion: reduce) { .screen.on { animation: none; } .hot { transition: none; } }
 </style>
 </head>
@@ -480,11 +562,14 @@ body {
   <section class="screen" id="s-post">
     <img class="bg" alt="" data-img="post">
     <div class="nav" data-nav="post" style="left:19.1%;top:7%;width:79.4%;height:6.4%"></div>
-    <div class="pill-cover" style="left:62.6%;top:79.6%;width:13%;height:5.8%;background:var(--red);color:#fff;border-color:var(--red-dark);font-size:1.4cqw">편지 열어보기</div>
+    <div class="pill-cover" id="fromBadgeCover" style="left:62.6%;top:79.6%;width:13%;height:5.8%;background:var(--red);color:#fff;border-color:var(--red-dark);font-size:1.4cqw">편지 열어보기</div>
     <div class="paper" style="left:55.7%;top:89.2%;width:14.2%;height:6%;font-size:1.15cqw;line-height:1.35;background:#FFF7E6">선생님 편지가 도착하면<br>바로 열 수 있어요.</div>
-    <button class="hot" data-soon="선생님에게 보내는 편지" style="left:24.9%;top:40%;width:15.6%;height:44%" aria-label="선생님에게 보내는 편지"></button>
-    <button class="hot" data-soon="중3이 된 나에게 보내는 편지" style="left:41.8%;top:40%;width:17.3%;height:44%" aria-label="중3이 된 나에게 보내는 편지"></button>
-    <button class="hot" data-soon="선생님에게서 도착한 편지" style="left:60.3%;top:40%;width:16.1%;height:46%" aria-label="선생님에게서 도착한 편지"></button>
+    <button class="hot" data-post="teacher" style="left:24.9%;top:40%;width:15.6%;height:44%" aria-label="선생님에게 보내는 편지"></button>
+    <button class="hot" data-post="me" style="left:41.8%;top:40%;width:17.3%;height:44%" aria-label="중3이 된 나에게 보내는 편지"></button>
+    <button class="hot" data-post="from" style="left:60.3%;top:40%;width:16.1%;height:46%" aria-label="선생님에게서 도착한 편지"></button>
+    <div class="post-tag" id="tagTeacher" style="left:32.7%;top:36.5%"></div>
+    <div class="post-tag" id="tagMe" style="left:50.4%;top:36.5%"></div>
+    <div class="post-tag" id="tagFrom" style="left:68.4%;top:36.5%"></div>
   </section>
 
   <!-- 8. 방명록 -->
@@ -544,6 +629,30 @@ body {
     <div class="tv-name"></div>
     <button class="big-btn light" id="tvClose">닫기</button>
   </div></div>
+  <div class="modal-bg" id="letterWrite"><div class="letter">
+    <div class="lt-to" id="ltTo">To. 선생님</div>
+    <textarea id="ltText" maxlength="500"></textarea>
+    <div class="lt-from" id="ltFrom"></div>
+    <div class="tw-foot"><span class="tw-err" id="ltErr"></span><span class="tw-len" id="ltLen">0 / 500</span></div>
+    <div class="g-btns"><button class="big-btn light" id="ltCancel">닫기</button><button class="big-btn" id="ltOk">편지 보내기</button></div>
+  </div></div>
+  <div class="modal-bg" id="letterOpen"><div class="env-wrap">
+    <div class="env" id="env">
+      <div class="env-back"></div>
+      <div class="env-paper"></div>
+      <div class="env-front"></div>
+      <div class="env-flap"></div>
+      <div class="env-seal">♥</div>
+      <div class="env-name" id="envName"></div>
+    </div>
+    <div class="env-hint">봉투를 눌러서 열어 봐!</div>
+  </div>
+  <div class="letter read" id="letterRead">
+    <div class="lt-to" id="lrTo"></div>
+    <div class="lr-body" id="lrBody"></div>
+    <div class="lt-from" id="lrFrom"></div>
+    <div class="g-btns"><button class="big-btn light" id="lrClose">닫기</button></div>
+  </div></div>
   <div class="modal-bg" id="pickModal"><div class="modal"><h3>나는 어느 반이야?</h3><div class="choices" id="pickList"></div></div></div>
 </div>
 
@@ -596,6 +705,23 @@ body {
           return ok({ ok: true, student: { name: s.name, grade: s.grade, teacher: s.teacher, points: s.points } });
         }
         if (action === 'gameScore') return ok({ ok: true });
+        if (action === 'postMine') return ok(fakePost(d));
+        if (action === 'postSend') {
+          var err2 = S.checkLetter(d.text);
+          if (err2) return ok({ ok: false, msg: err2 });
+          var key = 'cv-post-' + d.name + d.grade + d.teacher, st = {};
+          try { st = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+          var slot = d.kind === 'teacher' ? 'toTeacher' : 'toMe';
+          if (st[slot]) return ok({ ok: false, msg: '편지는 1번만 보낼 수 있어!' });
+          st[slot] = { text: String(d.text).trim(), time: Date.now() };
+          var pts = null;
+          if (slot === 'toTeacher') {
+            var stu = FAKE_STUDENTS.filter(function (x) { return x.name === d.name && x.grade === d.grade && x.teacher === d.teacher; })[0];
+            if (stu) { stu.points += S.LETTER.points; pts = { add: S.LETTER.points, total: stu.points }; }
+          }
+          try { localStorage.setItem(key, JSON.stringify(st)); } catch (e) {}
+          return ok({ ok: true, data: fakePost(d), points: pts });
+        }
         if (action === 'treeList') return ok({ ok: true, items: fakeTree(d), today: fakeToday() });
         if (action === 'treeAdd') {
           var err = S.checkTreeMessage(d.msg);
@@ -622,6 +748,15 @@ body {
     ['bell', '선생님 감사합니다', '전우진'], ['star', '원하는 고등학교 가기', '홍서아'], ['heart', '우리 반 최고!', '고은우'],
     ['gift', '매일 같이 먹던 간식', '문하린'], ['snow', '나야 힘내!', '양준서']
   ];
+  var FAKE_TEACHER_LETTERS = {
+    '김덕배': '덕배야, 1년 동안 정말 고생 많았어!\n\n처음 만났을 때는 숙제 검사 시간마다 눈치를 보던 덕배가, 2학기에는 먼저 질문하러 오는 모습을 보면서 선생님이 얼마나 뿌듯했는지 몰라.\n\n중3이 되면 해야 할 것도 많아지고 힘든 날도 있겠지만, 지금처럼 웃으면서 한 걸음씩 가면 충분해. 선생님은 늘 덕배 편이야.\n\n메리 크리스마스! 🎄'
+  };
+  function fakePost(d) {
+    var st = {};
+    try { st = JSON.parse(localStorage.getItem('cv-post-' + d.name + d.grade + d.teacher) || '{}'); } catch (e) {}
+    var L = FAKE_TEACHER_LETTERS[d.name];
+    return { ok: true, toTeacher: st.toTeacher || null, toMe: st.toMe || null, fromTeacher: L ? { text: L, teacher: d.teacher } : null };
+  }
   function fakeTreeStore() {
     try {
       var all = JSON.parse(localStorage.getItem('cv-tree') || 'null');
@@ -657,12 +792,15 @@ body {
     screens.forEach(function (n) { document.getElementById('s-' + n).classList.toggle('on', n === name); });
     document.getElementById('musicBtn').style.display = ['gameland','quizhouse','tree','door','market'].indexOf(name) >= 0 ? 'flex' : 'none';
     if ((name === 'tree' || name === 'map') && me && typeof Tree !== 'undefined') Tree.load();
+    if (name === 'post' && me && typeof Post !== 'undefined') Post.load();
     try { sessionStorage.setItem('cv-screen', name === 'game' ? 'gameland' : name); } catch (e) {}
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-go]');
     if (b) { go(b.dataset.go); return; }
     if (e.target.closest('[data-music]')) { Music.toggle(); return; }
+    var pb = e.target.closest('[data-post]');
+    if (pb) { Post.open(pb.dataset.post); return; }
     var ob = e.target.closest('[data-orn]');
     if (ob) { Tree.openWrite(ob.dataset.orn); return; }
     var gm = e.target.closest('[data-game]');
@@ -917,6 +1055,99 @@ body {
     return { load: load, openWrite: openWrite, isLoaded: function () { return loaded; } };
   })();
   function who() { return me ? { name: me.name, grade: me.grade, teacher: me.teacher } : {}; }
+
+  // ---------- 비밀 우체국 ----------
+  var Post = (function () {
+    var data = { toTeacher: null, toMe: null, fromTeacher: null }, kind = null;
+    function tags() {
+      function set(id, on, txt, cls) { var t = document.getElementById(id); t.className = 'post-tag' + (on ? ' on ' + (cls || '') : ''); t.textContent = txt; }
+      set('tagTeacher', !!data.toTeacher, '보냈어요!', 'done');
+      set('tagMe', !!data.toMe, '보관 중', 'done');
+      set('tagFrom', !!data.fromTeacher, '편지 1통 도착!', 'new');
+      document.getElementById('fromBadgeCover').textContent = data.fromTeacher ? '편지 열어보기' : '편지가 곧 와요';
+    }
+    function load() {
+      return api('postMine', who()).then(function (r) { if (r.ok) { data = r; tags(); } });
+    }
+    function openWrite(k) {
+      kind = k;
+      var saved = k === 'teacher' ? data.toTeacher : data.toMe;
+      var ta = document.getElementById('ltText');
+      document.getElementById('ltTo').textContent = k === 'teacher' ? 'To. ' + me.teacher + ' 선생님' : 'To. 중3이 된 나에게';
+      document.getElementById('ltFrom').textContent = 'From. ' + me.name;
+      ta.maxLength = S.LETTER.max;
+      ta.value = saved ? saved.text : '';
+      ta.readOnly = !!saved;
+      ta.placeholder = k === 'teacher'
+        ? '선생님께 고마웠던 일, 하고 싶은 말을 적어 봐!\n(보내면 +' + S.LETTER.points.toLocaleString() + '원, 1번만 보낼 수 있어요)'
+        : '1년 뒤의 나에게 하고 싶은 말을 적어 봐!\n(나만 볼 수 있어요)';
+      document.getElementById('ltOk').style.display = saved ? 'none' : '';
+      document.getElementById('ltErr').textContent = saved ? (k === 'teacher' ? '이미 보낸 편지야. 선생님께 잘 전달됐어!' : '보관 중인 편지야.') : '';
+      document.getElementById('ltLen').textContent = ta.value.length + ' / ' + S.LETTER.max;
+      document.getElementById('letterWrite').classList.add('on');
+      if (!saved) setTimeout(function () { ta.focus(); }, 50);
+    }
+    function send() {
+      var text = document.getElementById('ltText').value.trim(), err = S.checkLetter(text);
+      if (err) { document.getElementById('ltErr').textContent = err; return; }
+      var btn = document.getElementById('ltOk'); btn.disabled = true; btn.textContent = '보내는 중...';
+      api('postSend', Object.assign(who(), { kind: kind, text: text })).then(function (r) {
+        btn.disabled = false; btn.textContent = '편지 보내기';
+        if (!r.ok) { document.getElementById('ltErr').textContent = r.msg || '다시 시도해 줘!'; return; }
+        document.getElementById('letterWrite').classList.remove('on');
+        data = r.data; tags();
+        fly(kind === 'teacher' ? [32.7, 50] : [50.4, 50]);
+        setTimeout(function () {
+          if (r.points) {
+            me.points = r.points.total; updatePoints();
+            if (window.Games) { Games.sfx('win'); Games.confetti(document.getElementById('stage')); }
+            toast('편지가 선생님께 전달됐어!<br><span style="color:var(--red)">+' + r.points.add.toLocaleString() + '원</span>');
+          } else { if (window.Games) Games.sfx('match'); toast('편지를 잘 보관했어!'); }
+        }, 750);
+      }).catch(function () { btn.disabled = false; btn.textContent = '편지 보내기'; document.getElementById('ltErr').textContent = '연결이 느려요. 다시 눌러 줘!'; });
+    }
+    function fly(to) {
+      var f = document.createElement('div'); f.className = 'fly-env';
+      f.style.left = '47%'; f.style.top = '40%';
+      document.getElementById('stage').appendChild(f);
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        f.style.left = (to[0] - 3) + '%'; f.style.top = to[1] + '%'; f.style.transform = 'scale(.5) rotate(-12deg)'; f.style.opacity = '0';
+      }); });
+      setTimeout(function () { f.remove(); }, 1000);
+    }
+    function openFrom() {
+      var L = data.fromTeacher;
+      if (!L) { toast('선생님 편지가 곧 도착해요!<br><span style="font-size:1.5cqw">조금만 기다려 줘.</span>'); return; }
+      var bg = document.getElementById('letterOpen');
+      bg.classList.remove('reading'); document.getElementById('env').classList.remove('open');
+      document.getElementById('envName').textContent = 'To. ' + me.name;
+      document.getElementById('lrTo').textContent = 'To. ' + me.name;
+      document.getElementById('lrBody').textContent = L.text;
+      document.getElementById('lrFrom').textContent = 'From. ' + (L.teacher || me.teacher) + ' 선생님';
+      bg.classList.add('on');
+    }
+    document.getElementById('env').onclick = function () {
+      var e = this; if (e.classList.contains('open')) return;
+      e.classList.add('open'); if (window.Games) Games.sfx('flip');
+      setTimeout(function () { document.getElementById('letterOpen').classList.add('reading'); if (window.Games) Games.sfx('match'); }, 1100);
+    };
+    document.getElementById('lrClose').onclick = function () { document.getElementById('letterOpen').classList.remove('on'); };
+    document.getElementById('ltCancel').onclick = function () { document.getElementById('letterWrite').classList.remove('on'); };
+    document.getElementById('ltOk').onclick = send;
+    document.getElementById('ltText').addEventListener('input', function (e) {
+      document.getElementById('ltLen').textContent = e.target.value.length + ' / ' + S.LETTER.max;
+      document.getElementById('ltErr').textContent = '';
+    });
+    ['letterWrite', 'letterOpen'].forEach(function (id) {
+      var bg = document.getElementById(id);
+      bg.addEventListener('click', function (e) { if (e.target === bg) bg.classList.remove('on'); });
+    });
+    return { load: load, open: function (k) { if (k === 'from') openFrom(); else openWrite(k); } };
+  })();
+  function updatePoints() {
+    document.getElementById('chipPt').textContent = me.points.toLocaleString() + '원';
+    try { sessionStorage.setItem('cv-me', JSON.stringify(me)); } catch (e) {}
+  }
 
   // ---------- 게임에서 쓰는 것 ----------
   window.CV = {
