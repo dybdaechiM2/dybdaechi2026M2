@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>눈 내리는 크리스마스 마을</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎄</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E6F0F3; --ink:#173B2F; --panel:#FFFFFF; --line:#173B2F;
+  --red:#C8102E; --gold:#E9A820; --pine:#1E6B4F; --soft:#D3E4E8;
+  --night:#14304A; --night2:#0E2236;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0E2236; --ink:#F4F8FA; --panel:#17344F; --line:#9FC3D6;
+    --soft:#21456A; --pine:#3FA27A;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{
+  margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+  font-family:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  font-size:18px;line-height:1.6;
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+h1,h2,button,.hand{font-family:"Gaegu","Apple SD Gothic Neo","Malgun Gothic",cursive;font-weight:700}
+button{
+  cursor:pointer;font-size:22px;color:var(--ink);background:var(--panel);
+  border:3px solid var(--line);border-radius:999px;padding:6px 20px;
+}
+button:hover{background:var(--soft)}
+button:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+button.on{background:var(--red);color:#fff;border-color:var(--red)}
+.hidden{display:none!important}
+
+/* 마을 첫 장면 */
+.village{
+  position:relative;overflow:hidden;color:#fff;
+  background:linear-gradient(var(--night2),var(--night) 70%);
+  padding:calc(env(safe-area-inset-top,0px) + 48px) 20px 0;text-align:center;
+}
+#snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.village h1{position:relative;margin:0;font-size:clamp(46px,10vw,88px);line-height:1;letter-spacing:1px}
+.village h1 small{display:block;font-size:.42em;color:var(--gold);margin-bottom:8px}
+.village p{position:relative;margin:14px auto 0;max-width:30em;font-size:19px;opacity:.9}
+.houses{position:relative;display:block;width:100%;max-width:900px;margin:28px auto -2px}
+
+main{max-width:900px;margin:0 auto;padding:36px 16px 56px}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px}
+.door{
+  text-align:left;border-radius:28px 28px 14px 14px;padding:24px;font-size:inherit;
+  display:flex;flex-direction:column;gap:4px;min-height:190px;
+}
+.door .emo{font-size:58px;line-height:1}
+.door h2{margin:4px 0 0;font-size:38px;line-height:1.1}
+.door p{margin:0;font-family:"Gowun Dodum",sans-serif;font-size:17px}
+.door.gift{background:var(--red);color:#fff;border-color:var(--red)}
+.door.tree{background:var(--pine);color:#fff;border-color:var(--pine)}
+.door:hover{filter:brightness(1.08)}
+
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.top h2{margin:0;font-size:42px}
+.panel{background:var(--panel);border:3px solid var(--line);border-radius:22px;padding:16px}
+
+/* 선물 받기 */
+.hud{display:flex;justify-content:space-between;font-size:26px;margin:0 4px 10px}
+.stage{position:relative}
+#game{display:block;width:100%;aspect-ratio:4/3;border-radius:14px;background:var(--night);touch-action:none}
+.overlay{
+  position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:10px;
+  background:rgba(14,34,54,.82);color:#fff;border-radius:14px;padding:16px;
+}
+.overlay h3{margin:0;font-family:"Gaegu",cursive;font-size:clamp(34px,7vw,52px)}
+.overlay p{margin:0}
+.overlay button{justify-self:center;background:var(--gold);border-color:var(--gold);color:#173B2F}
+.help{font-size:16px;margin:10px 4px 0;opacity:.8}
+
+/* 트리 꾸미기 */
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.orn{font-size:30px;padding:4px 12px;line-height:1.3}
+#treeBox{position:relative;max-width:460px;margin:0 auto;cursor:crosshair;touch-action:manipulation}
+#treeBox svg{display:block;width:100%;height:auto}
+.deco{position:absolute;transform:translate(-50%,-50%);font-size:clamp(22px,5vw,34px);pointer-events:none;user-select:none}
+.lit .deco.light{animation:tw 1.2s infinite alternate}
+.lit .deco.light:nth-child(odd){animation-delay:.6s}
+@keyframes tw{from{opacity:.35;filter:none}to{opacity:1;filter:drop-shadow(0 0 8px gold)}}
+@media (prefers-reduced-motion: reduce){.lit .deco.light{animation:none}}
+.msg{text-align:center;font-family:"Gaegu",cursive;font-size:28px;margin:10px 0 0;min-height:44px}
+footer{text-align:center;font-size:15px;opacity:.7;padding-bottom:24px}
+</style>
+</head>
+<body>
+
+<header class="village">
+  <canvas id="snow" aria-hidden="true"></canvas>
+  <h1><small>어서 오세요!</small>크리스마스 마을</h1>
+  <p>눈 내리는 마을에서 산타의 선물을 받고, 우리만의 트리를 꾸며 봐요.</p>
+  <svg class="houses" viewBox="0 0 900 170" aria-hidden="true">
+    <path d="M0 120 Q150 90 300 115 T600 110 T900 118 V170 H0Z" fill="#F4F8FA"/>
+    <g fill="#5B2A2A"><rect x="90" y="70" width="110" height="60"/><rect x="380" y="55" width="140" height="75"/><rect x="690" y="75" width="100" height="55"/></g>
+    <g fill="#F4F8FA"><path d="M80 75 L145 25 L210 75Z"/><path d="M368 60 L450 5 L532 60Z"/><path d="M680 80 L740 35 L800 80Z"/></g>
+    <g fill="#F2C14E"><rect x="110" y="88" width="22" height="20"/><rect x="160" y="88" width="22" height="20"/><rect x="400" y="75" width="26" height="24"/><rect x="474" y="75" width="26" height="24"/><rect x="715" y="92" width="20" height="18"/></g>
+    <rect x="436" y="95" width="28" height="35" fill="#C8102E"/>
+    <g fill="#1E6B4F"><path d="M260 128 L285 70 L310 128Z"/><path d="M590 125 L620 55 L650 125Z"/><path d="M830 128 L852 82 L874 128Z"/></g>
+    <path d="M0 130 Q200 115 450 128 T900 126 V170 H0Z" fill="#F4F8FA"/>
+  </svg>
+</header>
+
+<main>
+  <!-- 첫 화면 -->
+  <section id="home">
+    <div class="doors">
+      <button class="door gift" onclick="show('gift')">
+        <span class="emo">🎁</span>
+        <h2>선물 받기</h2>
+        <p>썰매를 움직여 하늘에서 떨어지는 선물을 받아요. 석탄은 피해야 해요!</p>
+      </button>
+      <button class="door tree" onclick="show('tree')">
+        <span class="emo">🎄</span>
+        <h2>트리 꾸미기</h2>
+        <p>장식을 골라 트리 위에 콕콕 붙여요. 다 꾸미면 불을 켜 봐요.</p>
+      </button>
+    </div>
+  </section>
+
+  <!-- 선물 받기 -->
+  <section id="gift" class="hidden">
+    <div class="top">
+      <h2>🎁 선물 받기</h2>
+      <button onclick="show('home')">마을로 돌아가기</button>
+    </div>
+    <div class="panel">
+      <div class="hud hand"><span id="score">선물 0개</span><span id="time">⏰ 30초</span></div>
+      <div class="stage">
+        <canvas id="game" width="640" height="480"></canvas>
+        <div class="overlay" id="startBox">
+          <h3 id="ovTitle">선물을 받아라!</h3>
+          <p id="ovText">30초 동안 선물을 최대한 많이 모아요.<br>🎁 +1 · ⭐ +3 · 석탄 ⚫ −2</p>
+          <button onclick="startGift()" id="ovBtn">시작하기</button>
+        </div>
+      </div>
+      <p class="help">컴퓨터에서는 ← → 방향키나 마우스로, 휴대폰·태블릿에서는 화면을 손가락으로 끌어서 썰매를 움직여요.</p>
+    </div>
+  </section>
+
+  <!-- 트리 꾸미기 -->
+  <section id="tree" class="hidden">
+    <div class="top">
+      <h2>🎄 트리 꾸미기</h2>
+      <button onclick="show('home')">마을로 돌아가기</button>
+    </div>
+    <div class="panel">
+      <div class="tools" id="orns">
+        <button class="orn on" data-o="🔴" data-light="1">🔴</button>
+        <button class="orn" data-o="🟡" data-light="1">🟡</button>
+        <button class="orn" data-o="🔵" data-light="1">🔵</button>
+        <button class="orn" data-o="⭐" data-light="1">⭐</button>
+        <button class="orn" data-o="🎀">🎀</button>
+        <button class="orn" data-o="🔔">🔔</button>
+        <button class="orn" data-o="🍬">🍬</button>
+        <button class="orn" data-o="❄️">❄️</button>
+        <button class="orn" data-o="🧸">🧸</button>
+      </div>
+      <div id="treeBox" aria-label="트리를 눌러 장식을 붙여요">
+        <svg viewBox="0 0 400 460">
+          <polygon points="200,10 214,42 248,42 220,62 231,95 200,75 169,95 180,62 152,42 186,42" fill="#E9A820"/>
+          <polygon points="200,60 290,170 110,170" fill="#1E6B4F"/>
+          <polygon points="200,120 330,270 70,270" fill="#1E6B4F"/>
+          <polygon points="200,200 370,380 30,380" fill="#1E6B4F"/>
+          <rect x="175" y="380" width="50" height="55" fill="#7A4A2A"/>
+          <ellipse cx="200" cy="445" rx="150" ry="12" fill="#C9DCE2"/>
+        </svg>
+      </div>
+      <p class="msg" id="treeMsg">트리를 눌러 장식을 붙여 보세요!</p>
+      <div class="tools" style="justify-content:center;margin:8px 0 0">
+        <button onclick="undoDeco()">하나 지우기</button>
+        <button onclick="clearDeco()">모두 지우기</button>
+        <button onclick="toggleLights()" id="lightBtn">✨ 불 켜기</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>메리 크리스마스! 🎅</footer>
+
+<script>
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 화면 전환 ---------- */
+function show(id){
+  ["home","gift","tree"].forEach(s=>document.getElementById(s).classList.toggle("hidden",s!==id));
+  if(id!=="gift") stopGift();
+  document.querySelector("main").scrollIntoView({behavior:reduce?"auto":"smooth"});
+}
+
+/* ---------- 마을 눈 ---------- */
+(function(){
+  const c=document.getElementById("snow"),x=c.getContext("2d");let flakes=[];
+  function size(){c.width=c.offsetWidth;c.height=c.offsetHeight;
+    flakes=Array.from({length:Math.round(c.width/9)},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2.6+1,s:Math.random()*.6+.3,d:Math.random()*Math.PI*2}));}
+  function draw(){x.clearRect(0,0,c.width,c.height);x.fillStyle="rgba(255,255,255,.9)";
+    flakes.forEach(f=>{x.beginPath();x.arc(f.x,f.y,f.r,0,7);x.fill();
+      if(!reduce){f.y+=f.s;f.d+=.01;f.x+=Math.sin(f.d)*.4;if(f.y>c.height){f.y=-4;f.x=Math.random()*c.width}}});
+    if(!reduce) requestAnimationFrame(draw);}
+  size();addEventListener("resize",size);draw();
+})();
+
+/* ---------- 선물 받기 ---------- */
+const cv=document.getElementById("game"),g=cv.getContext("2d");
+const W=640,H=480;
+let G={running:false};
+const keys={};
+addEventListener("keydown",e=>{if(["ArrowLeft","ArrowRight"].includes(e.key)&&G.running){keys[e.key]=true;e.preventDefault()}});
+addEventListener("keyup",e=>keys[e.key]=false);
+function pointerX(e){const r=cv.getBoundingClientRect();return (e.clientX-r.left)/r.width*W}
+cv.addEventListener("pointermove",e=>{if(G.running)G.sled=Math.max(50,Math.min(W-50,pointerX(e)))});
+cv.addEventListener("pointerdown",e=>{if(G.running)G.sled=Math.max(50,Math.min(W-50,pointerX(e)))});
+
+function startGift(){
+  G={running:true,sled:W/2,items:[],score:0,left:30,last:performance.now(),spawn:0,tick:0};
+  document.getElementById("startBox").classList.add("hidden");
+  updHud();
+  G.timer=setInterval(()=>{G.left--;updHud();if(G.left<=0)endGift()},1000);
+  requestAnimationFrame(loop);
+}
+function stopGift(){if(G.running){G.running=false;clearInterval(G.timer)}
+  document.getElementById("startBox").classList.remove("hidden");
+  document.getElementById("ovTitle").textContent="선물을 받아라!";
+  document.getElementById("ovBtn").textContent="시작하기";}
+function updHud(){document.getElementById("score").textContent=`선물 ${G.score}개`;
+  document.getElementById("time").textContent=`⏰ ${G.left}초`;}
+function endGift(){
+  G.running=false;clearInterval(G.timer);
+  const s=G.score;
+  document.getElementById("ovTitle").textContent=s>=30?"🎅 산타도 깜짝 놀랐어요!":s>=15?"🎉 선물이 가득해요!":"🎁 선물을 받았어요!";
+  document.getElementById("ovText").innerHTML=`모은 점수는 <b>${s}점</b>이에요.<br>한 번 더 하면 더 많이 받을 수 있을 거예요!`;
+  document.getElementById("ovBtn").textContent="다시 하기";
+  document.getElementById("startBox").classList.remove("hidden");
+}
+function loop(t){
+  if(!G.running) return;
+  const dt=Math.min(40,t-G.last)/16.7;G.last=t;
+  if(keys.ArrowLeft)G.sled=Math.max(50,G.sled-9*dt);
+  if(keys.ArrowRight)G.sled=Math.min(W-50,G.sled+9*dt);
+  const speedUp=1+(30-G.left)/30;
+  G.spawn-=dt;
+  if(G.spawn<=0){
+    const r=Math.random();
+    const type=r<.14?"coal":r<.24?"star":"gift";
+    G.items.push({x:30+Math.random()*(W-60),y:-30,v:(2+Math.random()*2)*speedUp,type,e:type==="gift"?["🎁","🍭","🧦","🍪"][Math.floor(Math.random()*4)]:type==="star"?"⭐":"⚫"});
+    G.spawn=26/speedUp;
+  }
+  g.clearRect(0,0,W,H);
+  // 하늘과 달
+  g.fillStyle="#14304A";g.fillRect(0,0,W,H);
+  g.fillStyle="#F6E7B0";g.beginPath();g.arc(560,70,34,0,7);g.fill();
+  g.fillStyle="#14304A";g.beginPath();g.arc(574,62,30,0,7);g.fill();
+  g.fillStyle="#F4F8FA";g.fillRect(0,H-40,W,40);
+  // 떨어지는 것들
+  g.textAlign="center";g.textBaseline="middle";g.font="40px sans-serif";
+  G.items.forEach(it=>{it.y+=it.v*dt;g.fillText(it.e,it.x,it.y)});
+  // 썰매
+  const sy=H-70;
+  g.font="56px sans-serif";g.fillText("🛷",G.sled,sy);
+  // 받기 판정
+  G.items=G.items.filter(it=>{
+    if(it.y>sy-30&&it.y<sy+20&&Math.abs(it.x-G.sled)<52){
+      G.score=Math.max(0,G.score+(it.type==="coal"?-2:it.type==="star"?3:1));updHud();
+      return false;}
+    return it.y<H+30;
+  });
+  requestAnimationFrame(loop);
+}
+// 처음 화면 그림
+(function(){g.fillStyle="#14304A";g.fillRect(0,0,W,H);g.fillStyle="#F4F8FA";g.fillRect(0,H-40,W,40);
+  g.textAlign="center";g.textBaseline="middle";g.font="56px sans-serif";g.fillText("🛷",W/2,H-70)})();
+
+/* ---------- 트리 꾸미기 ---------- */
+let cur={o:"🔴",light:true};
+const box=document.getElementById("treeBox");
+document.querySelectorAll("#orns button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#orns button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");cur={o:b.dataset.o,light:!!b.dataset.light};
+}));
+box.addEventListener("click",e=>{
+  const r=box.getBoundingClientRect();
+  const px=(e.clientX-r.left)/r.width*400, py=(e.clientY-r.top)/r.height*460;
+  if(!onTree(px,py)){say("초록 나무 위를 눌러 주세요 🌲");return}
+  const d=document.createElement("span");
+  d.className="deco"+(cur.light?" light":"");d.textContent=cur.o;
+  d.style.left=(px/400*100)+"%";d.style.top=(py/460*100)+"%";
+  box.appendChild(d);
+  const n=box.querySelectorAll(".deco").length;
+  say(n>=20?"정말 멋진 트리예요! 불을 켜 볼까요? ✨":n>=8?"점점 반짝반짝해져요!":"좋아요, 계속 꾸며 봐요!");
+});
+function onTree(x,y){
+  const tri=(ax,ay,bx,by,cx,cy)=>{const s=(px,py,qx,qy,rx,ry)=>(px-rx)*(qy-ry)-(qx-rx)*(py-ry);
+    const d1=s(x,y,ax,ay,bx,by),d2=s(x,y,bx,by,cx,cy),d3=s(x,y,cx,cy,ax,ay);
+    return !((d1<0||d2<0||d3<0)&&(d1>0||d2>0||d3>0));};
+  return tri(200,60,290,170,110,170)||tri(200,120,330,270,70,270)||tri(200,200,370,380,30,380);
+}
+function say(t){document.getElementById("treeMsg").textContent=t}
+function undoDeco(){const all=box.querySelectorAll(".deco");if(all.length)all[all.length-1].remove()}
+function clearDeco(){box.querySelectorAll(".deco").forEach(d=>d.remove());say("새로 꾸며 볼까요?")}
+function toggleLights(){
+  const on=box.classList.toggle("lit");
+  document.getElementById("lightBtn").textContent=on?"🌙 불 끄기":"✨ 불 켜기";
+  if(on) say("반짝반짝! 메리 크리스마스 🎄");
+}
+</script>
+</body>
+</html>
