@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-<script src="shared.js?v=6"></script>
-<script src="games.js?v=4"></script>
+<script src="shared.js?v=7"></script>
+<script src="games.js?v=7"></script>
 <style>
 :root {
   --red: #C8202F; --red-dark: #8E1220; --cream: #FFF6E4; --paper: #FFF9EC;
@@ -458,13 +458,19 @@ body {
   position: absolute; display: flex; flex-direction: column; gap: .5cqw; padding: 1cqw 1.2cqw 1cqw;
   background: #FFF9EC; border: .3cqw solid var(--brown); border-radius: 1.4cqw; box-shadow: 0 .35cqw 0 rgba(60,30,15,.35);
 }
-.gb-write { display: flex; align-items: center; gap: .8cqw; background: #FFFDF7; border: .22cqw solid #A9785A; border-radius: 999px; padding: .35cqw .4cqw .35cqw 1.4cqw; }
+.gb-write { display: flex; align-items: center; gap: .8cqw; width: 100%; cursor: pointer; font-family: var(--font); text-align: left; background: #FFFDF7; border: .22cqw solid #A9785A; border-radius: 999px; padding: .35cqw .4cqw .35cqw 1.4cqw; }
+.gb-write:hover { border-color: var(--red); background: #FFF6E0; }
+.gb-fake { flex: 1; font-size: 1.55cqw; color: #8A6A55; }
+.gb-input { width: 100%; font-family: var(--font); font-size: 1.9cqw; color: var(--brown); border: .22cqw solid #A9785A; border-radius: 1.2cqw; padding: 1cqw 1.2cqw; background: #FFFDF7; outline: none; }
+.gb-input:focus { border-color: var(--red); }
+.gb-input::placeholder { color: #A89080; }
+#gbModal .g-btns { justify-content: center; }
 .gb-write:focus-within { border-color: var(--red); }
 .gb-write input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-family: var(--font); font-size: 1.6cqw; color: var(--brown); }
 .gb-write input::placeholder { color: #A89080; }
 .gb-len { font-size: 1.2cqw; color: #8A6A55; }
 .gb-send { font-size: 1.45cqw; padding: .45cqw 1.6cqw; box-shadow: 0 .25cqw 0 var(--red-dark); }
-.gb-write.done { justify-content: center; background: #E7F7EC; border-color: var(--green); color: var(--green); font-size: 1.5cqw; padding: .75cqw 1cqw; }
+.gb-write.done { justify-content: center; background: #E7F7EC; border-color: var(--green); color: var(--green); font-size: 1.5cqw; padding: .75cqw 1cqw; cursor: default; }
 .gb-err { min-height: 1.6cqw; font-size: 1.25cqw; color: var(--red); padding-left: 1.4cqw; margin-top: -.3cqw; }
 .gb-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: .5cqw; padding-right: .4cqw; scrollbar-width: thin; }
 .gb-item { display: flex; align-items: center; gap: .9cqw; border-radius: 1cqw; padding: .35cqw 1.1cqw .35cqw .6cqw; border: .18cqw solid rgba(90,56,33,.25); }
@@ -633,12 +639,10 @@ body {
     <div class="paper" style="left:2.6%;top:44%;width:10.2%;height:18.8%;background:#F6E6CB;font-size:1.75cqw;line-height:1.3;color:var(--brown)">다음 중2<br>후배들에게<br>한마디<br>남겨줘! <span style="color:var(--red)">♥</span></div>
     <div class="paper" style="left:45%;top:42.5%;width:11.5%;height:3.8%;background:#FCF1DC;font-size:1.4cqw;border-radius:.4cqw">다음 중2에게 한마디</div>
     <div class="gb-panel" style="left:20.3%;top:47%;width:61.8%;height:36.8%">
-      <div class="gb-write" id="gbWrite">
-        <input id="gbInput" maxlength="40" placeholder="예) 숙제는 미루지 마라… 진심이다 ㅋㅋ" autocomplete="off" aria-label="한마디">
-        <span class="gb-len" id="gbLen">0/40</span>
-        <button class="big-btn gb-send" id="gbSend">올리기</button>
-      </div>
-      <div class="gb-err" id="gbErr"></div>
+      <button class="gb-write" id="gbWrite" data-gb="write">
+        <span class="gb-fake">여기를 눌러서 후배들에게 한마디 쓰기 ✏️</span>
+        <span class="big-btn gb-send">쓰기</span>
+      </button>
       <div class="gb-list" id="gbList"></div>
     </div>
     <button class="hot pill" data-gb="write" style="left:27.3%;top:85.4%;width:18.9%;height:6.8%" aria-label="새 메시지 작성하기"></button>
@@ -718,6 +722,12 @@ body {
     <div class="lt-from" id="lrFrom"></div>
     <div class="g-btns"><button class="big-btn light" id="lrClose">닫기</button></div>
   </div></div>
+  <div class="modal-bg" id="gbModal"><div class="modal tw">
+    <div class="tw-head"><h3>다음 중2에게 한마디</h3></div>
+    <input id="gbInput" class="gb-input" maxlength="40" placeholder="예) 숙제는 미루지 마라… 진심이다 ㅋㅋ" autocomplete="off" aria-label="한마디">
+    <div class="tw-foot"><span class="tw-err" id="gbErr"></span><span class="tw-len" id="gbLen">0 / 40</span></div>
+    <div class="g-btns"><button class="big-btn light" id="gbCancel">취소</button><button class="big-btn" id="gbSend">올리기</button></div>
+  </div></div>
   <div class="modal-bg" id="gbAll"><div class="gb-board">
     <div class="gb-board-head"><h3>다음 중2에게 한마디 <span id="gbAllCount"></span></h3><button class="small-btn" id="gbAllClose">닫기</button></div>
     <div class="gb-grid" id="gbGrid"></div>
@@ -729,6 +739,10 @@ body {
 (function () {
   var S = window.SHARED;
   var V = S.VERSION;
+  var NEED_VERSION = 7;
+  if (V < NEED_VERSION || !window.Games) {
+    setTimeout(function () { toast('파일이 일부 예전 버전이야!<br><span style="font-size:1.5cqw">index.html·shared.js·games.js를 같이 올리고 새로고침해 줘.</span>'); }, 800);
+  }
   var LIVE = location.hostname === S.PROD_HOST && !!S.API_URL;
   var me = null;
 
@@ -1295,18 +1309,23 @@ body {
       }).join('') : '<div class="gb-empty" style="grid-column:1/-1">첫 번째 한마디를 남겨 줘!</div>';
       document.getElementById('gbAll').classList.add('on');
     }
+    document.getElementById('gbCancel').onclick = function () { document.getElementById('gbModal').classList.remove('on'); };
+    document.getElementById('gbModal').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('on'); });
     document.getElementById('gbAllClose').onclick = function () { document.getElementById('gbAll').classList.remove('on'); };
     document.getElementById('gbAll').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('on'); });
     function load() { return api('gbList', who()).then(function (r) { if (r.ok) { items = r.items; render(); } }); }
     function send() {
       var inp = document.getElementById('gbInput'); if (!inp) return;
-      var text = inp.value.trim(), err = S.checkGuestbook(text), errEl = document.getElementById('gbErr');
+      var errEl = document.getElementById('gbErr');
+      if (typeof S.checkGuestbook !== 'function') { errEl.textContent = '파일이 예전 버전이야. 새로고침(Ctrl+Shift+R) 해 줘!'; return; }
+      var text = inp.value.trim(), err = S.checkGuestbook(text);
       if (err) { errEl.textContent = err; return; }
       var btn = document.getElementById('gbSend'); btn.disabled = true;
       api('gbAdd', Object.assign(who(), { text: text })).then(function (r) {
         btn.disabled = false;
         if (!r.ok) { errEl.textContent = r.msg || '다시 시도해 줘!'; return; }
-        errEl.textContent = ''; items = r.items; mode = 'all'; render();
+        errEl.textContent = ''; document.getElementById('gbModal').classList.remove('on');
+        items = r.items; mode = 'all'; render();
         document.getElementById('gbList').scrollTop = 0;
         if (r.points) {
           me.points = r.points.total; updatePoints();
@@ -1318,14 +1337,16 @@ body {
     document.getElementById('gbSend').onclick = send;
     document.getElementById('gbInput').addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.isComposing) send(); });
     document.getElementById('gbInput').addEventListener('input', function (e) {
-      document.getElementById('gbLen').textContent = e.target.value.length + '/' + S.GUESTBOOK.max;
+      document.getElementById('gbLen').textContent = e.target.value.length + ' / ' + ((S.GUESTBOOK && S.GUESTBOOK.max) || 40);
       document.getElementById('gbErr').textContent = '';
     });
     setInterval(function () { if (me && document.getElementById('s-guestbook').classList.contains('on')) load(); }, 15000);
     function action(k) {
       if (k === 'write') {
-        if (mineItem()) { toast('한마디는 1번만 쓸 수 있어!'); return; }
-        mode = 'all'; render(); var inp = document.getElementById('gbInput'); if (inp) inp.focus();
+        if (mineItem()) { toast('한마디는 1번만 쓸 수 있어!<br><span style="font-size:1.5cqw">\'내가 쓴 메시지\'에서 볼 수 있어.</span>'); return; }
+        var inp = document.getElementById('gbInput');
+        inp.value = ''; document.getElementById('gbErr').textContent = ''; document.getElementById('gbLen').textContent = '0 / 40';
+        document.getElementById('gbModal').classList.add('on'); inp.focus();
       } else if (k === 'all') { openAll(); }
       else { mode = k; render(); document.getElementById('gbList').scrollTop = 0; }
     }
