@@ -7,7 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-<script src="shared.js?v=1"></script>
+<script src="shared.js?v=2"></script>
+<script src="games.js?v=3"></script>
 <style>
 :root {
   --red: #C8202F; --red-dark: #8E1220; --cream: #FFF6E4; --paper: #FFF9EC;
@@ -218,6 +219,92 @@ body {
 }
 .back-btn:hover { background: #FFF0C4; }
 
+/* 게임 화면 */
+#s-game {
+  background-color: var(--red-dark);
+  background-image: radial-gradient(circle, rgba(255,255,255,.16) 0 .22cqw, transparent .26cqw);
+  background-size: 4cqw 4cqw;
+}
+.game-top {
+  position: absolute; left: 1.2cqw; right: 1.2cqw; top: 1cqw; height: 4.6cqw; display: flex; align-items: center; gap: 1.2cqw;
+  background: linear-gradient(#FFFBF1, #F6E7CB); border: .25cqw solid var(--brown); border-radius: 999px; padding: 0 1cqw 0 1.6cqw;
+  box-shadow: 0 .3cqw 0 rgba(60,30,15,.45);
+}
+.game-title { font-size: 2.1cqw; color: var(--red); white-space: nowrap; }
+.game-stats { flex: 1; text-align: center; font-size: 1.6cqw; white-space: nowrap; }
+.game-stats b { color: var(--red); font-weight: normal; font-size: 1.9cqw; }
+.game-top .small-btn { font-size: 1.4cqw; padding: .4cqw 1.3cqw; }
+.game-area {
+  position: absolute; left: 1.2cqw; right: 1.2cqw; top: 7cqw; bottom: 1.2cqw; overflow: hidden;
+  border: .3cqw solid var(--brown); border-radius: 1.8cqw; background: #FFF6E4; touch-action: none; user-select: none;
+}
+.g-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.g-card {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 46cqw; text-align: center;
+  background: var(--paper); border: .35cqw solid var(--brown); border-radius: 2.2cqw; padding: 2cqw 2.4cqw 2.4cqw;
+  box-shadow: 0 .6cqw 0 rgba(60,30,15,.35);
+}
+.g-card h3 { margin: .4cqw 0 .8cqw; font-weight: normal; font-size: 3cqw; color: var(--red); }
+.g-card p { margin: 0 0 1.6cqw; font-size: 1.6cqw; line-height: 1.5; }
+.g-icon svg { width: 9cqw; height: 9cqw; }
+.g-over { position: absolute; inset: 0; background: rgba(40,10,15,.45); z-index: 5; animation: fadeIn .25s; }
+.g-score { font-size: 6cqw; color: var(--brown); line-height: 1.1; margin-bottom: .6cqw; }
+.g-score small { font-size: 2.4cqw; margin-left: .3cqw; }
+.g-new { color: var(--red); font-weight: normal; font-size: 2cqw; }
+.g-btns { display: flex; gap: 1.2cqw; justify-content: center; }
+
+/* 캐릭터를 잡아라 */
+.wh-wrap {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; grid-template-columns: repeat(3, 15cqw); gap: .4cqw 4cqw;
+}
+.wh-wrap.shake { animation: shake .3s; }
+@keyframes shake { 25% { margin-left: -.8cqw; } 75% { margin-left: .8cqw; } }
+.wh-hole { position: relative; width: 15cqw; height: 15cqw; overflow: hidden; }
+.wh-pop {
+  position: absolute; left: 1.5cqw; width: 12cqw; height: 12cqw; bottom: -12cqw; cursor: pointer;
+  transition: bottom .14s ease-out, transform .12s;
+}
+.wh-pop svg { width: 100%; height: 100%; display: block; pointer-events: none; }
+.wh-pop.up { bottom: 2.4cqw; }
+.wh-pop.gold svg { filter: drop-shadow(0 0 .8cqw #FFD43B) drop-shadow(0 0 .4cqw #FFB000); }
+.wh-pop.hit { transform: scale(.85) rotate(-8deg); }
+.wh-hole::before {
+  content: ''; position: absolute; left: 1.6cqw; right: 1.6cqw; bottom: 1.6cqw; height: 3.4cqw; border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 40%, #2A1B2E 55%, #4B3550 100%);
+}
+.wh-snow {
+  position: absolute; left: .2cqw; right: .2cqw; bottom: 0; height: 3.4cqw; pointer-events: none;
+  background: linear-gradient(#FFFFFF, #E4EEFA); border: .25cqw solid #9DB4D2; border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+.wh-float { position: absolute; left: 50%; top: 10%; transform: translateX(-50%); font-size: 2.6cqw; color: var(--green); animation: floatUp .7s forwards; pointer-events: none; text-shadow: 0 0 .3cqw #fff; }
+.wh-float.bad { color: var(--red); }
+@keyframes floatUp { to { top: -20%; opacity: 0; } }
+.game-area:has(.wh-wrap) { background: linear-gradient(#BFD9F2, #EEF5FD 60%, #FFFFFF); }
+
+/* 메모리 카드 */
+.mm-grid {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; grid-template-columns: repeat(4, 10cqw); gap: 1.1cqw;
+}
+.mm-card { width: 10cqw; height: 10cqw; padding: 0; border: 0; background: none; cursor: pointer; perspective: 60cqw; }
+.mm-in { position: relative; width: 100%; height: 100%; transition: transform .35s; transform-style: preserve-3d; }
+.mm-card.open .mm-in, .mm-card.done .mm-in { transform: rotateY(180deg); }
+.mm-back, .mm-front {
+  position: absolute; inset: 0; border-radius: 1.2cqw; border: .25cqw solid var(--brown); backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; box-shadow: 0 .3cqw 0 rgba(60,30,15,.35);
+}
+.mm-back {
+  background-color: var(--red);
+  background-image: radial-gradient(circle, rgba(255,255,255,.6) 0 .35cqw, transparent .4cqw), linear-gradient(90deg, transparent 43%, #FFD43B 43% 57%, transparent 57%), linear-gradient(transparent 43%, #FFD43B 43% 57%, transparent 57%);
+  background-size: 2.5cqw 2.5cqw, 100% 100%, 100% 100%;
+}
+.mm-front { background: #FFFDF6; transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
+.mm-front svg { width: 80%; height: 80%; }
+.mm-card.done .mm-front { background: #FFF3C4; }
+.mm-card:hover:not(.open):not(.done) .mm-in { transform: translateY(-.3cqw); }
+
 @media (prefers-reduced-motion: reduce) { .screen.on { animation: none; } .hot { transition: none; } }
 </style>
 </head>
@@ -266,10 +353,10 @@ body {
     <img class="bg" alt="" data-img="gameland">
     <div class="pill-cover label" style="left:1.1%;top:.7%;width:35.4%;height:10%">게임랜드 (미니게임 4종)</div>
     <button class="hot pill" data-go="map" style="left:79.6%;top:1.8%;width:19.4%;height:10.2%" aria-label="마을로 돌아가기"></button>
-    <button class="hot" data-soon="달려라 포스!" style="left:15%;top:28.7%;width:17.3%;height:25.3%" aria-label="달려라 포스"></button>
-    <button class="hot" data-soon="선물 쌓기" style="left:50.8%;top:28.7%;width:17.1%;height:25.3%" aria-label="선물 쌓기"></button>
-    <button class="hot" data-soon="캐릭터를 잡아라!" style="left:68.6%;top:28.7%;width:17%;height:25.3%" aria-label="캐릭터를 잡아라"></button>
-    <button class="hot" data-soon="메모리 카드" style="left:15%;top:55.6%;width:17.3%;height:26.1%" aria-label="메모리 카드"></button>
+    <button class="hot" data-game="run" style="left:15%;top:28.7%;width:17.3%;height:25.3%" aria-label="달려라 포스"></button>
+    <button class="hot" data-game="stack" style="left:50.8%;top:28.7%;width:17.1%;height:25.3%" aria-label="선물 쌓기"></button>
+    <button class="hot" data-game="whack" style="left:68.6%;top:28.7%;width:17%;height:25.3%" aria-label="캐릭터를 잡아라"></button>
+    <button class="hot" data-game="memory" style="left:15%;top:55.6%;width:17.3%;height:26.1%" aria-label="메모리 카드"></button>
     <div class="soon" style="left:33%;top:28.7%;width:17.2%;height:25.3%"><span>Coming soon</span></div>
     <div class="soon" style="left:33%;top:55.6%;width:17.2%;height:26.1%"><span>Coming soon</span></div>
     <div class="soon" style="left:50.8%;top:55.6%;width:17.1%;height:26.1%"><span>Coming soon</span></div>
@@ -343,6 +430,17 @@ body {
     <button class="hot pill" data-soon="새로운 이야기" style="left:35%;top:85%;width:29.4%;height:12%" aria-label="새로운 이야기 보기"></button>
   </section>
 
+  <!-- 게임 화면 -->
+  <section class="screen" id="s-game">
+    <div class="game-top">
+      <div class="game-title"></div>
+      <div class="game-stats"></div>
+      <button class="small-btn mus" data-music="1">캐럴 끄기</button>
+      <button class="small-btn game-exit">게임랜드로</button>
+    </div>
+    <div class="game-area"></div>
+  </section>
+
   <!-- 10. 크리스마스 마켓 (2단계에서 채움) -->
   <section class="screen" id="s-market">
     <div class="market-head"><div class="market-title">크리스마스 마켓</div></div>
@@ -411,6 +509,7 @@ body {
           var s = list[0];
           return ok({ ok: true, student: { name: s.name, grade: s.grade, teacher: s.teacher, points: s.points } });
         }
+        if (action === 'gameScore') return ok({ ok: true });
         ok({ ok: false, msg: '알 수 없는 요청' });
       }, 350);
     });
@@ -418,17 +517,20 @@ body {
   api('ping'); // 서버 미리 깨우기
 
   // ---------- 화면 이동 ----------
-  var screens = ['invite', 'map', 'gameland', 'quizhouse', 'tree', 'award', 'post', 'guestbook', 'door', 'market'];
+  var screens = ['invite', 'map', 'gameland', 'quizhouse', 'tree', 'award', 'post', 'guestbook', 'door', 'market', 'game'];
   function go(name) {
     if (name !== 'invite' && !me) name = 'invite';
     screens.forEach(function (n) { document.getElementById('s-' + n).classList.toggle('on', n === name); });
     document.getElementById('musicBtn').style.display = ['gameland','quizhouse','tree','door','market'].indexOf(name) >= 0 ? 'flex' : 'none';
-    try { sessionStorage.setItem('cv-screen', name); } catch (e) {}
+    try { sessionStorage.setItem('cv-screen', name === 'game' ? 'gameland' : name); } catch (e) {}
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-go]');
     if (b) { go(b.dataset.go); return; }
     if (e.target.closest('[data-music]')) { Music.toggle(); return; }
+    var gm = e.target.closest('[data-game]');
+    if (gm) { go('game'); Games.open(gm.dataset.game); return; }
+    if (e.target.closest('.game-exit')) { Games.close(); go('gameland'); return; }
     var s = e.target.closest('[data-soon]');
     if (s) toast(s.dataset.soon + '<br><span style="font-size:1.5cqw">곧 열려요!</span>');
   });
@@ -549,6 +651,13 @@ body {
     return { start: start, toggle: toggle, isOn: function () { return on; } };
   })();
   document.getElementById('musicBtn').onclick = Music.toggle;
+
+  // ---------- 게임에서 쓰는 것 ----------
+  window.CV = {
+    go: go,
+    me: function () { return me; },
+    saveScore: function (game, score) { api('gameScore', { name: me && me.name, game: game, score: score }); }
+  };
 
   // ---------- 새로고침해도 로그인 유지 ----------
   try {
