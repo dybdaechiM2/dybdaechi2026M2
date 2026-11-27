@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-<script src="shared.js?v=5"></script>
+<script src="shared.js?v=6"></script>
 <script src="games.js?v=4"></script>
 <style>
 :root {
@@ -453,6 +453,60 @@ body {
 }
 .fly-env::after { content: '♥'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--red); font-size: 2cqw; }
 
+/* 방명록 */
+.gb-panel {
+  position: absolute; display: flex; flex-direction: column; gap: .5cqw; padding: 1cqw 1.2cqw 1cqw;
+  background: #FFF9EC; border: .3cqw solid var(--brown); border-radius: 1.4cqw; box-shadow: 0 .35cqw 0 rgba(60,30,15,.35);
+}
+.gb-write { display: flex; align-items: center; gap: .8cqw; background: #FFFDF7; border: .22cqw solid #A9785A; border-radius: 999px; padding: .35cqw .4cqw .35cqw 1.4cqw; }
+.gb-write:focus-within { border-color: var(--red); }
+.gb-write input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-family: var(--font); font-size: 1.6cqw; color: var(--brown); }
+.gb-write input::placeholder { color: #A89080; }
+.gb-len { font-size: 1.2cqw; color: #8A6A55; }
+.gb-send { font-size: 1.45cqw; padding: .45cqw 1.6cqw; box-shadow: 0 .25cqw 0 var(--red-dark); }
+.gb-write.done { justify-content: center; background: #E7F7EC; border-color: var(--green); color: var(--green); font-size: 1.5cqw; padding: .75cqw 1cqw; }
+.gb-err { min-height: 1.6cqw; font-size: 1.25cqw; color: var(--red); padding-left: 1.4cqw; margin-top: -.3cqw; }
+.gb-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: .5cqw; padding-right: .4cqw; scrollbar-width: thin; }
+.gb-item { display: flex; align-items: center; gap: .9cqw; border-radius: 1cqw; padding: .35cqw 1.1cqw .35cqw .6cqw; border: .18cqw solid rgba(90,56,33,.25); }
+.gb-item.c0 { background: #FFF3C4; } .gb-item.c1 { background: #FFE3EA; } .gb-item.c2 { background: #E3F5DD; }
+.gb-item.c3 { background: #DDF0FB; } .gb-item.c4 { background: #EDE3FA; } .gb-item.c5 { background: #FDE9D6; }
+.gb-item.mine { border-color: var(--red); box-shadow: 0 0 0 .15cqw rgba(200,32,47,.25); }
+.gb-item.new { animation: gbIn .5s ease-out; }
+@keyframes gbIn { from { transform: translateY(-1.5cqw); opacity: 0; } }
+.gb-ava { width: 2.9cqw; height: 2.9cqw; flex: none; }
+.gb-ava svg { width: 100%; height: 100%; display: block; }
+.gb-main { flex: 1; min-width: 0; }
+.gb-who { font-size: 1.25cqw; color: #7A5A45; }
+.gb-who b { color: var(--brown); font-weight: normal; font-size: 1.4cqw; margin-right: .5cqw; }
+.gb-me { display: inline-block; background: var(--red); color: #fff; font-size: 1cqw; padding: 0 .6cqw; border-radius: 999px; margin-left: .4cqw; vertical-align: .1cqw; }
+.gb-msg { font-size: 1.5cqw; line-height: 1.3; overflow-wrap: anywhere; }
+.gb-time { font-size: 1.1cqw; color: #9A8070; white-space: nowrap; align-self: flex-start; margin-top: .3cqw; }
+.gb-empty { text-align: center; color: #8A6A55; font-size: 1.5cqw; padding: 3cqw 0; }
+.gb-board {
+  width: 88cqw; height: 50cqw; display: flex; flex-direction: column; background: #F3DDBA; border: .4cqw solid var(--brown);
+  border-radius: 2cqw; padding: 1.4cqw 1.8cqw 1.8cqw; box-shadow: 0 .6cqw 0 rgba(60,30,15,.45);
+  background-image: radial-gradient(circle, rgba(90,56,33,.08) 0 .15cqw, transparent .2cqw); background-size: 1.4cqw 1.4cqw;
+}
+.gb-board-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1cqw; }
+.gb-board-head h3 { margin: 0; font-weight: normal; font-size: 2.4cqw; color: var(--red); }
+.gb-board-head h3 span { font-size: 1.6cqw; color: var(--brown); }
+.gb-board-head .small-btn { font-size: 1.4cqw; padding: .4cqw 1.4cqw; }
+.gb-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2cqw; align-content: start; padding: .4cqw; }
+.gb-note {
+  position: relative; border-radius: .6cqw; padding: 1.2cqw 1.1cqw .9cqw; min-height: 9.5cqw; display: flex; flex-direction: column;
+  box-shadow: 0 .3cqw .5cqw rgba(60,30,15,.25); border: .15cqw solid rgba(90,56,33,.2);
+}
+.gb-note:nth-child(3n+1) { transform: rotate(-1.4deg); } .gb-note:nth-child(3n+2) { transform: rotate(1deg); }
+.gb-note::before { content: ''; position: absolute; left: 50%; top: -.7cqw; width: 4cqw; height: 1.4cqw; margin-left: -2cqw; background: rgba(255,255,255,.55); transform: rotate(-4deg); }
+.gb-note .gb-msg { flex: 1; font-size: 1.55cqw; }
+.gb-note .gb-foot { display: flex; align-items: center; gap: .5cqw; margin-top: .6cqw; font-size: 1.15cqw; color: #7A5A45; }
+.gb-note .gb-foot svg { width: 2.2cqw; height: 2.2cqw; }
+.gb-note .gb-foot b { font-weight: normal; color: var(--brown); font-size: 1.3cqw; }
+.gb-note.c0 { background: #FFF3C4; } .gb-note.c1 { background: #FFE3EA; } .gb-note.c2 { background: #E3F5DD; }
+.gb-note.c3 { background: #DDF0FB; } .gb-note.c4 { background: #EDE3FA; } .gb-note.c5 { background: #FDE9D6; }
+.gb-note.mine { box-shadow: 0 0 0 .25cqw var(--red), 0 .3cqw .5cqw rgba(60,30,15,.25); }
+.gb-tab.sel { box-shadow: 0 0 0 .3cqw rgba(255, 226, 120, .95), 0 0 1.4cqw rgba(255, 220, 110, .7); }
+
 @media (prefers-reduced-motion: reduce) { .screen.on { animation: none; } .hot { transition: none; } }
 </style>
 </head>
@@ -572,13 +626,24 @@ body {
     <div class="post-tag" id="tagFrom" style="left:68.4%;top:36.5%"></div>
   </section>
 
-  <!-- 8. 방명록 -->
+  <!-- 8. 방명록 (다음 중2에게 한마디) -->
   <section class="screen" id="s-guestbook">
     <img class="bg" alt="" data-img="guestbook">
     <div class="nav" data-nav="guestbook" style="left:1.8%;top:20.9%;width:96.3%;height:7.9%"></div>
-    <button class="hot pill" data-soon="새 메시지 작성하기" style="left:27.3%;top:85.4%;width:18.9%;height:6.8%" aria-label="새 메시지 작성하기"></button>
-    <button class="hot pill" data-soon="전체 메시지 보기" style="left:48.4%;top:85.4%;width:14.9%;height:6.8%" aria-label="전체 메시지 보기"></button>
-    <button class="hot pill" data-soon="내가 쓴 메시지" style="left:64.7%;top:85.4%;width:12.5%;height:6.8%" aria-label="내가 쓴 메시지"></button>
+    <div class="paper" style="left:2.6%;top:44%;width:10.2%;height:18.8%;background:#F6E6CB;font-size:1.75cqw;line-height:1.3;color:var(--brown)">다음 중2<br>후배들에게<br>한마디<br>남겨줘! <span style="color:var(--red)">♥</span></div>
+    <div class="paper" style="left:45%;top:42.5%;width:11.5%;height:3.8%;background:#FCF1DC;font-size:1.4cqw;border-radius:.4cqw">다음 중2에게 한마디</div>
+    <div class="gb-panel" style="left:20.3%;top:47%;width:61.8%;height:36.8%">
+      <div class="gb-write" id="gbWrite">
+        <input id="gbInput" maxlength="40" placeholder="예) 숙제는 미루지 마라… 진심이다 ㅋㅋ" autocomplete="off" aria-label="한마디">
+        <span class="gb-len" id="gbLen">0/40</span>
+        <button class="big-btn gb-send" id="gbSend">올리기</button>
+      </div>
+      <div class="gb-err" id="gbErr"></div>
+      <div class="gb-list" id="gbList"></div>
+    </div>
+    <button class="hot pill" data-gb="write" style="left:27.3%;top:85.4%;width:18.9%;height:6.8%" aria-label="새 메시지 작성하기"></button>
+    <button class="hot pill gb-tab" data-gb="all" style="left:48.4%;top:85.4%;width:14.9%;height:6.8%" aria-label="전체 메시지 보기"></button>
+    <button class="hot pill gb-tab" data-gb="mine" style="left:64.7%;top:85.4%;width:12.5%;height:6.8%" aria-label="내가 쓴 메시지"></button>
   </section>
 
   <!-- 9. 중3으로 향하는 문 -->
@@ -653,6 +718,10 @@ body {
     <div class="lt-from" id="lrFrom"></div>
     <div class="g-btns"><button class="big-btn light" id="lrClose">닫기</button></div>
   </div></div>
+  <div class="modal-bg" id="gbAll"><div class="gb-board">
+    <div class="gb-board-head"><h3>다음 중2에게 한마디 <span id="gbAllCount"></span></h3><button class="small-btn" id="gbAllClose">닫기</button></div>
+    <div class="gb-grid" id="gbGrid"></div>
+  </div></div>
   <div class="modal-bg" id="pickModal"><div class="modal"><h3>나는 어느 반이야?</h3><div class="choices" id="pickList"></div></div></div>
 </div>
 
@@ -705,6 +774,18 @@ body {
           return ok({ ok: true, student: { name: s.name, grade: s.grade, teacher: s.teacher, points: s.points } });
         }
         if (action === 'gameScore') return ok({ ok: true });
+        if (action === 'gbList') return ok({ ok: true, items: fakeGb(d) });
+        if (action === 'gbAdd') {
+          var e3 = S.checkGuestbook(d.text);
+          if (e3) return ok({ ok: false, msg: e3 });
+          var all3 = fakeGbStore(), k3 = d.name + d.grade + d.teacher;
+          if (all3.some(function (x) { return x.owner === k3; })) return ok({ ok: false, msg: '한마디는 1번만 쓸 수 있어!' });
+          all3.push({ id: 'g' + Date.now(), name: d.name, cls: S.classLabel(d), msg: String(d.text).trim(), time: Date.now(), owner: k3 });
+          try { localStorage.setItem('cv-gb', JSON.stringify(all3)); } catch (e) {}
+          var stu3 = FAKE_STUDENTS.filter(function (x) { return x.name === d.name && x.grade === d.grade && x.teacher === d.teacher; })[0], p3 = null;
+          if (stu3) { stu3.points += S.GUESTBOOK.points; p3 = { add: S.GUESTBOOK.points, total: stu3.points }; }
+          return ok({ ok: true, items: fakeGb(d), points: p3 });
+        }
         if (action === 'postMine') return ok(fakePost(d));
         if (action === 'postSend') {
           var err2 = S.checkLetter(d.text);
@@ -748,6 +829,23 @@ body {
     ['bell', '선생님 감사합니다', '전우진'], ['star', '원하는 고등학교 가기', '홍서아'], ['heart', '우리 반 최고!', '고은우'],
     ['gift', '매일 같이 먹던 간식', '문하린'], ['snow', '나야 힘내!', '양준서']
   ];
+  var FAKE_GB = [
+    ['박서윤', 4, '박', '숙제는 미루지 마라… 진심이다 ㅋㅋ', 95], ['최도윤', 5, '최', '단어 시험은 전날 말고 매일 조금씩!', 80],
+    ['정하준', 4, '박', '선생님 말씀 잘 들으면 중3이 편해짐', 72], ['강지우', 6, '이', '중2 생각보다 금방 지나가 즐겨!!', 60],
+    ['윤서진', 5, '최', '수행평가 날짜 꼭 적어두기 📌', 41], ['임채원', 4, '박', '친구랑 같이 공부하면 덜 힘들어', 33],
+    ['한유준', 6, '이', '쉬는 시간에 간식 챙겨와 ㅋㅋ', 25], ['오지민', 5, '최', '모르는 건 바로 질문하기!', 12]
+  ];
+  function fakeGbStore() {
+    try { var a = JSON.parse(localStorage.getItem('cv-gb') || 'null'); if (a) return a; } catch (e) {}
+    return FAKE_GB.map(function (g, i) {
+      return { id: 'gf' + i, name: g[0], cls: S.classLabel({ grade: g[1], teacher: g[2] }), msg: g[3], time: Date.now() - g[4] * 60000, owner: g[0] };
+    });
+  }
+  function fakeGb(d) {
+    var k = (d.name || '') + (d.grade || '') + (d.teacher || '');
+    return fakeGbStore().slice().sort(function (a, b) { return b.time - a.time; })
+      .map(function (x) { return { id: x.id, name: x.name, cls: x.cls, msg: x.msg, time: x.time, mine: x.owner === k }; });
+  }
   var FAKE_TEACHER_LETTERS = {
     '김덕배': '덕배야, 1년 동안 정말 고생 많았어!\n\n처음 만났을 때는 숙제 검사 시간마다 눈치를 보던 덕배가, 2학기에는 먼저 질문하러 오는 모습을 보면서 선생님이 얼마나 뿌듯했는지 몰라.\n\n중3이 되면 해야 할 것도 많아지고 힘든 날도 있겠지만, 지금처럼 웃으면서 한 걸음씩 가면 충분해. 선생님은 늘 덕배 편이야.\n\n메리 크리스마스! 🎄'
   };
@@ -793,12 +891,15 @@ body {
     document.getElementById('musicBtn').style.display = ['gameland','quizhouse','tree','door','market'].indexOf(name) >= 0 ? 'flex' : 'none';
     if ((name === 'tree' || name === 'map') && me && typeof Tree !== 'undefined') Tree.load();
     if (name === 'post' && me && typeof Post !== 'undefined') Post.load();
+    if (name === 'guestbook' && me && typeof Guest !== 'undefined') Guest.load();
     try { sessionStorage.setItem('cv-screen', name === 'game' ? 'gameland' : name); } catch (e) {}
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-go]');
     if (b) { go(b.dataset.go); return; }
     if (e.target.closest('[data-music]')) { Music.toggle(); return; }
+    var gb = e.target.closest('[data-gb]');
+    if (gb) { Guest.action(gb.dataset.gb); return; }
     var pb = e.target.closest('[data-post]');
     if (pb) { Post.open(pb.dataset.post); return; }
     var ob = e.target.closest('[data-orn]');
@@ -1148,6 +1249,88 @@ body {
     document.getElementById('chipPt').textContent = me.points.toLocaleString() + '원';
     try { sessionStorage.setItem('cv-me', JSON.stringify(me)); } catch (e) {}
   }
+
+  // ---------- 방명록 (다음 중2에게 한마디) ----------
+  var Guest = (function () {
+    var items = [], mode = 'all', shown = {};
+    var AVA = ['posu', 'wabi', 'dibi', 'kkomi', 'sora', 'bora'];
+    function hash(t) { var h = 0; for (var i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) | 0; return Math.abs(h); }
+    function ago(t) {
+      var m = Math.floor((Date.now() - t) / 60000);
+      if (m < 1) return '방금'; if (m < 60) return m + '분 전';
+      var h = Math.floor(m / 60); if (h < 24) return h + '시간 전';
+      var d = new Date(t); return (d.getMonth() + 1) + '/' + d.getDate();
+    }
+    function mineItem() { return items.filter(function (x) { return x.mine; })[0]; }
+    function render() {
+      var list = document.getElementById('gbList');
+      var arr = mode === 'mine' ? items.filter(function (x) { return x.mine; }) : items;
+      if (!arr.length) {
+        list.innerHTML = '<div class="gb-empty">' + (mode === 'mine' ? '아직 내가 쓴 한마디가 없어. 위에 적어 봐!' : '첫 번째 한마디를 남겨 줘!') + '</div>';
+      } else {
+        list.innerHTML = arr.map(function (x) {
+          var h = hash(x.name + x.cls), isNew = shown.ready && !shown[x.id];
+          return '<div class="gb-item c' + (h % 6) + (x.mine ? ' mine' : '') + (isNew ? ' new' : '') + '">' +
+            '<div class="gb-ava">' + (window.Games ? Games.svg(AVA[h % 6]) : '') + '</div>' +
+            '<div class="gb-main"><div class="gb-who"><b>' + esc(x.name) + '</b>' + esc(x.cls) + (x.mine ? '<span class="gb-me">나</span>' : '') + '</div>' +
+            '<div class="gb-msg">' + esc(x.msg) + '</div></div>' +
+            '<div class="gb-time">' + ago(x.time) + '</div></div>';
+        }).join('');
+      }
+      items.forEach(function (x) { shown[x.id] = 1; }); shown.ready = true;
+      var w = document.getElementById('gbWrite');
+      var mi = mineItem();
+      if (mi && !w.classList.contains('done')) {
+        w.classList.add('done'); w.innerHTML = '한마디를 남겼어! 후배들이 꼭 읽을 거야 ♥';
+      }
+      document.querySelectorAll('.gb-tab').forEach(function (b) { b.classList.toggle('sel', b.dataset.gb === mode); });
+    }
+    function openAll() {
+      mode = 'all'; render();
+      document.getElementById('gbAllCount').textContent = '(' + items.length + '개)';
+      document.getElementById('gbGrid').innerHTML = items.length ? items.map(function (x) {
+        var h = hash(x.name + x.cls);
+        return '<div class="gb-note c' + (h % 6) + (x.mine ? ' mine' : '') + '"><div class="gb-msg">' + esc(x.msg) + '</div>' +
+          '<div class="gb-foot">' + (window.Games ? Games.svg(AVA[h % 6]) : '') + '<b>' + esc(x.name) + '</b>' + esc(x.cls.replace(' 선생님 반', '반')) + '</div></div>';
+      }).join('') : '<div class="gb-empty" style="grid-column:1/-1">첫 번째 한마디를 남겨 줘!</div>';
+      document.getElementById('gbAll').classList.add('on');
+    }
+    document.getElementById('gbAllClose').onclick = function () { document.getElementById('gbAll').classList.remove('on'); };
+    document.getElementById('gbAll').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('on'); });
+    function load() { return api('gbList', who()).then(function (r) { if (r.ok) { items = r.items; render(); } }); }
+    function send() {
+      var inp = document.getElementById('gbInput'); if (!inp) return;
+      var text = inp.value.trim(), err = S.checkGuestbook(text), errEl = document.getElementById('gbErr');
+      if (err) { errEl.textContent = err; return; }
+      var btn = document.getElementById('gbSend'); btn.disabled = true;
+      api('gbAdd', Object.assign(who(), { text: text })).then(function (r) {
+        btn.disabled = false;
+        if (!r.ok) { errEl.textContent = r.msg || '다시 시도해 줘!'; return; }
+        errEl.textContent = ''; items = r.items; mode = 'all'; render();
+        document.getElementById('gbList').scrollTop = 0;
+        if (r.points) {
+          me.points = r.points.total; updatePoints();
+          if (window.Games) { Games.sfx('win'); Games.confetti(document.getElementById('stage')); }
+          toast('한마디를 남겼어!<br><span style="color:var(--red)">+' + r.points.add.toLocaleString() + '원</span>');
+        } else toast('한마디를 남겼어!');
+      }).catch(function () { btn.disabled = false; errEl.textContent = '연결이 느려요. 다시 눌러 줘!'; });
+    }
+    document.getElementById('gbSend').onclick = send;
+    document.getElementById('gbInput').addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.isComposing) send(); });
+    document.getElementById('gbInput').addEventListener('input', function (e) {
+      document.getElementById('gbLen').textContent = e.target.value.length + '/' + S.GUESTBOOK.max;
+      document.getElementById('gbErr').textContent = '';
+    });
+    setInterval(function () { if (me && document.getElementById('s-guestbook').classList.contains('on')) load(); }, 15000);
+    function action(k) {
+      if (k === 'write') {
+        if (mineItem()) { toast('한마디는 1번만 쓸 수 있어!'); return; }
+        mode = 'all'; render(); var inp = document.getElementById('gbInput'); if (inp) inp.focus();
+      } else if (k === 'all') { openAll(); }
+      else { mode = k; render(); document.getElementById('gbList').scrollTop = 0; }
+    }
+    return { load: load, action: action };
+  })();
 
   // ---------- 게임에서 쓰는 것 ----------
   window.CV = {
